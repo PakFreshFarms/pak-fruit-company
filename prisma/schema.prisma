@@ -1,0 +1,295 @@
+// Mandi Hisab — accounting system for a fruit market commission agent (arhti)
+// SQLite via Prisma. All money is stored as integer paisa.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountType {
+  VENDOR
+  CUSTOMER
+  CASH
+  BANK
+  EXPENSE
+  INCOME
+  ASSET
+  LIABILITY
+  CAPITAL
+  FARM
+}
+
+enum ExpenseBasis {
+  PER_CRATE
+  TRUCK_TOTAL_SPLIT
+  FIXED_PER_VOUCHER
+}
+
+enum BiltiStatus {
+  OPEN
+  COMPLETE
+}
+
+enum VoucherStatus {
+  OPEN
+  COMPLETE
+}
+
+enum UserRole {
+  OWNER
+  MUNSHI
+}
+
+model Account {
+  id             String      @id @default(cuid())
+  code           String      @unique
+  name           String
+  nameUr         String? // Urdu display name
+  type           AccountType
+  openingBalance Int         @default(0)
+  phone          String?
+  address        String?
+  isActive       Boolean     @default(true)
+  isSystem       Boolean     @default(false)
+  notes          String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  journalLines       JournalLine[]
+  vouchersAsVendor   Voucher[]        @relation("VoucherVendor")
+  salesAsCustomer    Sale[]           @relation("SaleCustomer")
+  biltiExpenses      BiltiExpense[]
+  farmExpensesPayee  FarmExpense[]
+  cashEntries        CashEntry[]
+
+  @@index([type])
+}
+
+model JournalEntry {
+  id         String        @id @default(cuid())
+  date       DateTime
+  refType    String // BILTI_SALE, PATTI, CASH, WASOOLI, ADVANCE, FARM_EXPENSE, FARM_SALE, OPENING, MANUAL
+  refId      String?
+  narration  String
+  isPosted   Boolean       @default(true)
+  isReversed Boolean       @default(false)
+  reversalOf String?
+  createdAt  DateTime      @default(now())
+  createdBy  String
+  lines      JournalLine[]
+
+  @@index([refType, refId])
+  @@index([date])
+}
+
+model JournalLine {
+  id          String       @id @default(cuid())
+  entryId     String
+  entry       JournalEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  accountId   String
+  account     Account      @relation(fields: [accountId], references: [id])
+  debit       Int          @default(0)
+  credit      Int          @default(0)
+  farmId      String?
+  farm        Farm?        @relation(fields: [farmId], references: [id])
+  vendorTagId String? // reporting-only tag used by Rate Difference lines
+  narration   String?
+
+  @@index([accountId])
+  @@index([farmId])
+  @@index([vendorTagId])
+}
+
+model Bilti {
+  id          String         @id @default(cuid())
+  biltiNo     String         @unique
+  truckNo     String
+  date        DateTime
+  itemName    String
+  totalCrates Int
+  status      BiltiStatus    @default(OPEN)
+  notes       String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  expenses    BiltiExpense[]
+  vouchers    Voucher[]
+
+  @@index([status])
+  @@index([date])
+}
+
+model BiltiExpense {
+  id               String       @id @default(cuid())
+  biltiId          String
+  bilti            Bilti        @relation(fields: [biltiId], references: [id], onDelete: Cascade)
+  head             String // KIRAYA, MAZDOORI, MUNSHIYANA, DAAK, BARDANA, PESHGI, OTHER
+  label            String
+  basis            ExpenseBasis
+  rate             Int
+  expenseAccountId String
+  expenseAccount   Account      @relation(fields: [expenseAccountId], references: [id])
+
+  @@index([biltiId])
+}
+
+model Voucher {
+  id             String        @id @default(cuid())
+  biltiId        String
+  bilti          Bilti         @relation(fields: [biltiId], references: [id], onDelete: Cascade)
+  voucherNo      String
+  vendorId       String
+  vendor         Account       @relation("VoucherVendor", fields: [vendorId], references: [id])
+  crates         Int
+  kirayaOverride Int?
+  status         VoucherStatus @default(OPEN)
+  pattiNo        String?       @unique
+  pattiDate      DateTime?
+  closedWithUnsold Boolean     @default(false)
+  closeReason    String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  lots           Lot[]
+
+  @@unique([biltiId, voucherNo])
+  @@index([vendorId])
+  @@index([status])
+}
+
+model Lot {
+  id         String   @id @default(cuid())
+  voucherId  String
+  voucher    Voucher  @relation(fields: [voucherId], references: [id], onDelete: Cascade)
+  name       String
+  crates     Int
+  reportRate Int
+  createdAt  DateTime @default(now())
+  sales      Sale[]
+
+  @@index([voucherId])
+}
+
+model Sale {
+  id             String    @id @default(cuid())
+  lotId          String
+  lot            Lot       @relation(fields: [lotId], references: [id], onDelete: Cascade)
+  date           DateTime
+  customerId     String
+  customer       Account   @relation("SaleCustomer", fields: [customerId], references: [id])
+  crates         Int
+  actualRate     Int
+  journalEntryId String?
+  notes          String?
+  createdAt      DateTime  @default(now())
+
+  @@index([lotId])
+  @@index([customerId])
+}
+
+model Farm {
+  id            String         @id @default(cuid())
+  name          String
+  season        String
+  landownerName String
+  rentAmount    Int
+  rentPaid      Int            @default(0)
+  startDate     DateTime
+  endDate       DateTime?
+  isClosed      Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  expenses      FarmExpense[]
+  dispatches    FarmDispatch[]
+  journalLines  JournalLine[]
+
+  @@index([isClosed])
+}
+
+model FarmExpense {
+  id             String   @id @default(cuid())
+  farmId         String
+  farm           Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  date           DateTime
+  head           String
+  payeeName      String?
+  payeeAccountId String?
+  payeeAccount   Account? @relation(fields: [payeeAccountId], references: [id])
+  amount         Int
+  narration      String?
+  journalEntryId String
+
+  @@index([farmId])
+  @@index([date])
+}
+
+model FarmDispatch {
+  id             String   @id @default(cuid())
+  farmId         String
+  farm           Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  date           DateTime
+  truckNo        String
+  crates         Int
+  netSaleAmount  Int      @default(0)
+  marketName     String?
+  chargeCommission Boolean @default(false)
+  status         String   @default("PENDING") // PENDING, RECEIVED
+  journalEntryId String?
+
+  @@index([farmId])
+  @@index([status])
+}
+
+model CashEntry {
+  id             String   @id @default(cuid())
+  date           DateTime
+  book           String // CASH or WASOOLI
+  direction      String // IN or OUT
+  accountId      String
+  account        Account  @relation(fields: [accountId], references: [id])
+  amount         Int
+  mode           String // CASH, BANK, CHEQUE, ONLINE
+  reference      String?
+  narration      String
+  journalEntryId String
+  createdAt      DateTime @default(now())
+
+  @@index([book, date])
+  @@index([accountId])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  role      UserRole @default(MUNSHI)
+  pin       String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
+
+model ItemExpenseDefault {
+  id              String       @id @default(cuid())
+  itemName        String
+  head            String
+  label           String
+  basis           ExpenseBasis
+  rate            Int
+
+  @@unique([itemName, head])
+}
+
+model Backup {
+  id        String   @id @default(cuid())
+  filePath  String
+  createdAt DateTime @default(now())
+  sizeBytes Int
+  auto      Boolean  @default(false)
+}

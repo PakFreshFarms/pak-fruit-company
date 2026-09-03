@@ -1,0 +1,29 @@
+{
+  "name": "mandi-hisab-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Desktop wrapper for Mandi Hisab — opens the local Next.js app in a native window with a Start Menu / desktop shortcut.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.pakfruitcompany.mandihisab",
+    "productName": "Mandi Hisab",
+    "files": ["main.js", "preload.js", "icon.ico"],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  }
+}

@@ -1,0 +1,165 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Warm paper-toned ledger surface, restrained rust accent. */
+  --paper: #f6f1e6;
+  --paper-raised: #fbf8f1;
+  --ink: #2b241c;
+  --ink-muted: #6b6152;
+  --rule: #d8cdb6;
+  --rule-strong: #b7a988;
+  --accent: #a8461f;
+  --accent-foreground: #fdf6ee;
+  --danger: #b3261e;
+  --success: #2f6b45;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-raised);
+  --card-foreground: var(--ink);
+  --muted: #ece4d2;
+  --muted-foreground: var(--ink-muted);
+  --border: var(--rule);
+  --input: var(--rule-strong);
+  --ring: var(--accent);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-foreground);
+  --secondary: #e7ddc4;
+  --secondary-foreground: var(--ink);
+  --destructive: var(--danger);
+  --destructive-foreground: #fff6f4;
+  --radius: 0.4rem;
+}
+
+.dark {
+  --paper: #1b1712;
+  --paper-raised: #24201a;
+  --ink: #ece3d1;
+  --ink-muted: #b3a58a;
+  --rule: #433c30;
+  --rule-strong: #574f3e;
+  --accent: #d97a4a;
+  --accent-foreground: #1b1712;
+  --danger: #e2685c;
+  --success: #6cbf8b;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-raised);
+  --card-foreground: var(--ink);
+  --muted: #2a251d;
+  --muted-foreground: var(--ink-muted);
+  --border: var(--rule);
+  --input: var(--rule-strong);
+  --ring: var(--accent);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-foreground);
+  --secondary: #322c22;
+  --secondary-foreground: var(--ink);
+  --destructive: var(--danger);
+  --destructive-foreground: #1b1712;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --font-sans: var(--font-body);
+  --font-urdu: var(--font-nastaliq);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+html.font-urdu body {
+  font-family: var(--font-nastaliq), var(--font-sans), serif;
+}
+
+* {
+  border-color: var(--border);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ledger table: ruled lines, no floating cards, dense rows. */
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.ledger-table th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted-foreground);
+  border-bottom: 2px solid var(--rule-strong);
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+}
+.ledger-table td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.45rem 0.75rem;
+  vertical-align: middle;
+}
+.ledger-table tbody tr:hover {
+  background: var(--muted);
+}
+.ledger-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.ledger-table .neg {
+  color: var(--danger);
+}
+.ledger-table .pos {
+  color: var(--success);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Print styles: patti, cash day sheet, reports. Screen-only chrome (nav, buttons, owner panel) is hidden. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .print-area {
+    box-shadow: none !important;
+    border: none !important;
+  }
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+}
