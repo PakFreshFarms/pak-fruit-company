@@ -222,9 +222,9 @@ export function SettingsView({
               <thead>
                 <tr>
                   <th>{t("common.date")}</th>
-                  <th>File</th>
-                  <th>Type</th>
-                  <th className="num">Size</th>
+                  <th>{t("common.file")}</th>
+                  <th>{t("common.type")}</th>
+                  <th className="num">{t("common.size")}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -234,7 +234,7 @@ export function SettingsView({
                     <td>{format(new Date(b.createdAt), "dd MMM yyyy, HH:mm")}</td>
                     <td className="text-xs text-muted-foreground">{b.filePath}</td>
                     <td>
-                      <Badge variant="outline">{b.auto ? "Auto" : "Manual"}</Badge>
+                      <Badge variant="outline">{b.auto ? t("common.auto") : t("common.manual")}</Badge>
                     </td>
                     <td className="num">{(b.sizeBytes / 1024).toFixed(1)} KB</td>
                     <td>

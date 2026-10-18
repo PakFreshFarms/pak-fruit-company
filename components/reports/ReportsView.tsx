@@ -87,22 +87,22 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.trialBalance")}
                 columns={[
-                  { header: "Code", key: "code" },
-                  { header: "Name", key: "name" },
-                  { header: "Type", key: "type" },
-                  { header: "Debit", key: "debit", isMoney: true },
-                  { header: "Credit", key: "credit", isMoney: true },
+                  { header: t("common.code"), key: "code" },
+                  { header: t("common.name"), key: "name" },
+                  { header: t("common.type"), key: "type" },
+                  { header: t("common.debit"), key: "debit", isMoney: true },
+                  { header: t("common.credit"), key: "credit", isMoney: true },
                 ]}
                 rows={props.trialBalance.rows}
               />
               <table className="ledger-table">
                 <thead>
                   <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th className="num">Debit</th>
-                    <th className="num">Credit</th>
+                    <th>{t("common.code")}</th>
+                    <th>{t("common.name")}</th>
+                    <th>{t("common.type")}</th>
+                    <th className="num">{t("common.debit")}</th>
+                    <th className="num">{t("common.credit")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -110,7 +110,7 @@ export function ReportsView(props: Props) {
                     <tr key={i}>
                       <td>{r.code}</td>
                       <td>{r.name}</td>
-                      <td className="text-xs text-muted-foreground">{r.type}</td>
+                      <td className="text-xs text-muted-foreground">{t(`account.type${r.type.charAt(0)}${r.type.slice(1).toLowerCase()}`)}</td>
                       <td className="num">{r.debit > 0 ? <Money paisa={r.debit} /> : ""}</td>
                       <td className="num">{r.credit > 0 ? <Money paisa={r.credit} /> : ""}</td>
                     </tr>
@@ -134,17 +134,17 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.vendorBalances")}
                 columns={[
-                  { header: "Code", key: "code" },
-                  { header: "Name", key: "name" },
-                  { header: "Balance", key: "balance", isMoney: true },
+                  { header: t("common.code"), key: "code" },
+                  { header: t("common.name"), key: "name" },
+                  { header: t("common.balance"), key: "balance", isMoney: true },
                 ]}
                 rows={props.vendorBalances}
               />
               <table className="ledger-table">
                 <thead>
                   <tr>
-                    <th>Code</th>
-                    <th>Name</th>
+                    <th>{t("common.code")}</th>
+                    <th>{t("common.name")}</th>
                     <th className="num">{t("common.balance")}</th>
                   </tr>
                 </thead>
@@ -168,17 +168,17 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.customerBalances")}
                 columns={[
-                  { header: "Code", key: "code" },
-                  { header: "Name", key: "name" },
-                  { header: "Balance", key: "balance", isMoney: true },
+                  { header: t("common.code"), key: "code" },
+                  { header: t("common.name"), key: "name" },
+                  { header: t("common.balance"), key: "balance", isMoney: true },
                 ]}
                 rows={props.customerBalances}
               />
               <table className="ledger-table">
                 <thead>
                   <tr>
-                    <th>Code</th>
-                    <th>Name</th>
+                    <th>{t("common.code")}</th>
+                    <th>{t("common.name")}</th>
                     <th className="num">{t("common.balance")}</th>
                   </tr>
                 </thead>
@@ -202,12 +202,12 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.customerAgeing")}
                 columns={[
-                  { header: "Name", key: "name" },
-                  { header: "0-7", key: "b0_7", isMoney: true },
-                  { header: "8-15", key: "b8_15", isMoney: true },
-                  { header: "16-30", key: "b16_30", isMoney: true },
-                  { header: "30+", key: "b30plus", isMoney: true },
-                  { header: "Total", key: "total", isMoney: true },
+                  { header: t("common.name"), key: "name" },
+                  { header: t("customer.bucket0_7"), key: "b0_7", isMoney: true },
+                  { header: t("customer.bucket8_15"), key: "b8_15", isMoney: true },
+                  { header: t("customer.bucket16_30"), key: "b16_30", isMoney: true },
+                  { header: t("customer.bucket30plus"), key: "b30plus", isMoney: true },
+                  { header: t("common.total"), key: "total", isMoney: true },
                 ]}
                 rows={props.ageing}
               />
@@ -253,8 +253,8 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.commissionEarned")}
                 columns={[
-                  { header: "Vendor", key: "vendorName" },
-                  { header: "Commission", key: "commission", isMoney: true },
+                  { header: t("vocab.vendor"), key: "vendorName" },
+                  { header: t("vocab.commission"), key: "commission", isMoney: true },
                 ]}
                 rows={props.commissionByVendor}
               />
@@ -276,7 +276,7 @@ export function ReportsView(props: Props) {
                   ))}
                 </tbody>
               </table>
-              <p className="mt-2 text-xs text-muted-foreground">Last month to date. See Bilti Profitability for per-truck detail.</p>
+              <p className="mt-2 text-xs text-muted-foreground">{t("reports.lastMonthNote")}</p>
             </div>
           )}
 
@@ -285,10 +285,10 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.rateDifferenceReport")}
                 columns={[
-                  { header: "Vendor", key: "name" },
-                  { header: "Given", key: "given", isMoney: true },
-                  { header: "Recovered", key: "recovered", isMoney: true },
-                  { header: "Net", key: "net", isMoney: true },
+                  { header: t("vocab.vendor"), key: "name" },
+                  { header: t("vendor.given"), key: "given", isMoney: true },
+                  { header: t("vendor.recovered"), key: "recovered", isMoney: true },
+                  { header: t("vendor.net"), key: "net", isMoney: true },
                 ]}
                 rows={props.rateDiff}
               />
@@ -326,16 +326,16 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.expenseRecoveryVsPaid")}
                 columns={[
-                  { header: "Head", key: "head" },
-                  { header: "Paid", key: "paid", isMoney: true },
+                  { header: t("bilti.expenseHead"), key: "head" },
+                  { header: t("reports.paid"), key: "paid", isMoney: true },
                 ]}
                 rows={props.expenseVsPaid.rows}
               />
               <table className="ledger-table">
                 <thead>
                   <tr>
-                    <th>Expense Head</th>
-                    <th className="num">Paid</th>
+                    <th>{t("bilti.expenseHead")}</th>
+                    <th className="num">{t("reports.paid")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -348,19 +348,19 @@ export function ReportsView(props: Props) {
                     </tr>
                   ))}
                   <tr>
-                    <td>Total Paid</td>
+                    <td>{t("reports.totalPaid")}</td>
                     <td className="num">
                       <Money paisa={props.expenseVsPaid.totalPaid} />
                     </td>
                   </tr>
                   <tr>
-                    <td>Recovered (charged to vendors)</td>
+                    <td>{t("reports.recoveredChargedToVendors")}</td>
                     <td className="num">
                       <Money paisa={props.expenseVsPaid.recovered} />
                     </td>
                   </tr>
                   <tr className="font-semibold">
-                    <td>Gain / (Loss)</td>
+                    <td>{t("reports.gainOrLoss")}</td>
                     <td className="num">
                       <Money paisa={props.expenseVsPaid.gainOrLoss} />
                     </td>
@@ -375,14 +375,14 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.biltiProfitability")}
                 columns={[
-                  { header: "Bilti", key: "biltiNo" },
-                  { header: "Truck", key: "truckNo" },
-                  { header: "Date", key: "date" },
-                  { header: "Item", key: "itemName" },
-                  { header: "Crates", key: "totalCrates" },
-                  { header: "Sold", key: "soldCrates" },
-                  { header: "Commission", key: "commission", isMoney: true },
-                  { header: "Expense Recovery", key: "expenseRecovery", isMoney: true },
+                  { header: t("vocab.bilti"), key: "biltiNo" },
+                  { header: t("reports.truck"), key: "truckNo" },
+                  { header: t("common.date"), key: "date" },
+                  { header: t("common.item"), key: "itemName" },
+                  { header: t("common.crates"), key: "totalCrates" },
+                  { header: t("bilti.soldCrates"), key: "soldCrates" },
+                  { header: t("vocab.commission"), key: "commission", isMoney: true },
+                  { header: t("reports.expenseRecovery"), key: "expenseRecovery", isMoney: true },
                 ]}
                 rows={props.biltiProfitability}
               />
@@ -392,10 +392,10 @@ export function ReportsView(props: Props) {
                     <th>{t("vocab.bilti")}</th>
                     <th>{t("vocab.truckNo")}</th>
                     <th>{t("common.date")}</th>
-                    <th>Item</th>
+                    <th>{t("common.item")}</th>
                     <th className="num">{t("common.crates")}</th>
                     <th className="num">{t("vocab.commission")}</th>
-                    <th className="num">Expense Recovery</th>
+                    <th className="num">{t("reports.expenseRecovery")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -426,12 +426,12 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.farmProfitLoss")}
                 columns={[
-                  { header: "Farm", key: "name" },
-                  { header: "Season", key: "season" },
-                  { header: "Rent", key: "rentAmount", isMoney: true },
-                  { header: "Expenses", key: "totalExpenses", isMoney: true },
-                  { header: "Income", key: "totalDispatchIncome", isMoney: true },
-                  { header: "Net", key: "netResult", isMoney: true },
+                  { header: t("reports.farm"), key: "name" },
+                  { header: t("farm.season"), key: "season" },
+                  { header: t("reports.rent"), key: "rentAmount", isMoney: true },
+                  { header: t("farm.expenses"), key: "totalExpenses", isMoney: true },
+                  { header: t("account.typeIncome"), key: "totalDispatchIncome", isMoney: true },
+                  { header: t("reports.net"), key: "netResult", isMoney: true },
                 ]}
                 rows={props.farms}
               />
@@ -475,52 +475,52 @@ export function ReportsView(props: Props) {
               <ExportBar
                 title={t("reports.seasonClosing")}
                 columns={[
-                  { header: "Metric", key: "metric" },
-                  { header: "Amount", key: "amount", isMoney: true },
+                  { header: t("reports.metric"), key: "metric" },
+                  { header: t("common.amount"), key: "amount", isMoney: true },
                 ]}
                 rows={[
-                  { metric: "Commission Income", amount: props.seasonClosing.commission },
-                  { metric: "Net Rate Difference", amount: props.seasonClosing.netRateDifference },
-                  { metric: "Expense Gain/(Loss)", amount: props.seasonClosing.expenseGainOrLoss },
-                  { metric: "Farm Net Result", amount: props.seasonClosing.farmNetTotal },
-                  { metric: "Total Vendor Payable", amount: props.seasonClosing.totalVendorPayable },
-                  { metric: "Total Customer Receivable", amount: props.seasonClosing.totalCustomerReceivable },
+                  { metric: t("reports.commissionIncome"), amount: props.seasonClosing.commission },
+                  { metric: t("dashboard.netRateDifference"), amount: props.seasonClosing.netRateDifference },
+                  { metric: t("reports.expenseGainLoss"), amount: props.seasonClosing.expenseGainOrLoss },
+                  { metric: t("reports.farmNetResult"), amount: props.seasonClosing.farmNetTotal },
+                  { metric: t("reports.totalVendorPayableClosing"), amount: props.seasonClosing.totalVendorPayable },
+                  { metric: t("reports.totalCustomerReceivableClosing"), amount: props.seasonClosing.totalCustomerReceivable },
                 ]}
               />
               <table className="ledger-table max-w-lg">
                 <tbody>
                   <tr>
-                    <td>Commission Income</td>
+                    <td>{t("reports.commissionIncome")}</td>
                     <td className="num">
                       <Money paisa={props.seasonClosing.commission} />
                     </td>
                   </tr>
                   <tr>
-                    <td>Net Rate Difference</td>
+                    <td>{t("dashboard.netRateDifference")}</td>
                     <td className="num">
                       <Money paisa={props.seasonClosing.netRateDifference} />
                     </td>
                   </tr>
                   <tr>
-                    <td>Expense Gain / (Loss)</td>
+                    <td>{t("reports.expenseGainLoss")}</td>
                     <td className="num">
                       <Money paisa={props.seasonClosing.expenseGainOrLoss} />
                     </td>
                   </tr>
                   <tr>
-                    <td>Farm Net Result</td>
+                    <td>{t("reports.farmNetResult")}</td>
                     <td className="num">
                       <Money paisa={props.seasonClosing.farmNetTotal} />
                     </td>
                   </tr>
                   <tr>
-                    <td>Total Vendor Payable (closing)</td>
+                    <td>{t("reports.totalVendorPayableClosing")}</td>
                     <td className="num">
                       <Money paisa={props.seasonClosing.totalVendorPayable} />
                     </td>
                   </tr>
                   <tr>
-                    <td>Total Customer Receivable (closing)</td>
+                    <td>{t("reports.totalCustomerReceivableClosing")}</td>
                     <td className="num">
                       <Money paisa={props.seasonClosing.totalCustomerReceivable} />
                     </td>

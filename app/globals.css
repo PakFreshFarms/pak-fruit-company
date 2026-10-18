@@ -61,6 +61,24 @@
   --destructive-foreground: #1b1712;
 }
 
+/* Colour themes — swap the restrained accent while keeping the same warm
+   paper surface and ruled-table structure (spec section 8: one accent
+   colour, not a generic SaaS palette). Picked via the topbar appearance menu. */
+:root[data-accent="green"] { --accent: #2f6b3f; }
+.dark[data-accent="green"] { --accent: #5fae71; }
+
+:root[data-accent="blue"] { --accent: #1f5c8b; }
+.dark[data-accent="blue"] { --accent: #6cb0e6; }
+
+:root[data-accent="purple"] { --accent: #6b3fa0; }
+.dark[data-accent="purple"] { --accent: #b98ee0; }
+
+:root[data-accent="amber"] { --accent: #a3720a; }
+.dark[data-accent="amber"] { --accent: #e0a93a; }
+
+:root[data-accent="teal"] { --accent: #166e6e; }
+.dark[data-accent="teal"] { --accent: #4fc3c3; }
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

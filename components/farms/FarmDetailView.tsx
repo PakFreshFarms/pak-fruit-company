@@ -99,7 +99,7 @@ export function FarmDetailView({
         <Card>
           <CardContent className="flex items-end justify-between gap-2 py-4">
             <div>
-              <div className="text-xs text-muted-foreground">Rent Due</div>
+              <div className="text-xs text-muted-foreground">{t("farm.rentDue")}</div>
               <div className="text-lg font-semibold tabular-nums">
                 <Money paisa={rentDue} />
               </div>
@@ -218,7 +218,7 @@ export function FarmDetailView({
               </table>
             </div>
             <div>
-              <h4 className="mb-2 text-sm font-semibold">Result</h4>
+              <h4 className="mb-2 text-sm font-semibold">{t("farm.result")}</h4>
               <table className="ledger-table">
                 <tbody>
                   <tr>

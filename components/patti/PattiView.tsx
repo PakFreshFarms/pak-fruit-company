@@ -185,8 +185,8 @@ export function PattiView({
         </div>
 
         <div className="mt-10 flex justify-between text-xs text-muted-foreground">
-          <div>Vendor Signature: ______________</div>
-          <div>Arhti Signature: ______________</div>
+          <div>{t("patti.vendorSignature")}: ______________</div>
+          <div>{t("patti.arhtiSignature")}: ______________</div>
         </div>
       </div>
 

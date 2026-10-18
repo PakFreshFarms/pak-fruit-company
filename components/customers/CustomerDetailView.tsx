@@ -72,8 +72,8 @@ export function CustomerDetailView({
           <tr>
             <th>{t("common.date")}</th>
             <th>{t("common.narration")}</th>
-            <th className="num">Debit</th>
-            <th className="num">Credit</th>
+            <th className="num">{t("common.debit")}</th>
+            <th className="num">{t("common.credit")}</th>
             <th className="num">{t("common.balance")}</th>
           </tr>
         </thead>

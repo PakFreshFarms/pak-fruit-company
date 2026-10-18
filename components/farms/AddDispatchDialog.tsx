@@ -75,7 +75,7 @@ export function AddDispatchDialog({ farmId }: { farmId: string }) {
               <Input id="crates" type="number" {...register("crates", { required: true })} />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="marketName">Market</Label>
+              <Label htmlFor="marketName">{t("common.market")}</Label>
               <Input id="marketName" {...register("marketName")} />
             </div>
           </div>

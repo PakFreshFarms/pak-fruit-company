@@ -78,7 +78,23 @@
     "theme": "تھیم",
     "light": "روشن",
     "dark": "تاریک",
-    "system": "سسٹم"
+    "system": "سسٹم",
+    "debit": "ڈیبٹ",
+    "credit": "کریڈٹ",
+    "market": "منڈی",
+    "auto": "خودکار",
+    "manual": "دستی",
+    "file": "فائل",
+    "size": "سائز",
+    "item": "پھل",
+    "vendors": "کاشتکار",
+    "colorTheme": "رنگ تھیم",
+    "accentRust": "زنگی",
+    "accentGreen": "سبز",
+    "accentBlue": "نیلا",
+    "accentPurple": "جامنی",
+    "accentAmber": "سنہری",
+    "accentTeal": "فیروزی"
   },
   "vocab": {
     "arhti": "آڑھتی",
@@ -208,11 +224,13 @@
     "addSale": "فروخت شامل کریں",
     "soldCrates": "فروخت شدہ",
     "remainingCrates": "باقی",
+    "cratesSoldTotal": "کریٹ (فروخت شدہ / کل)",
     "status_OPEN": "کھلا",
     "status_COMPLETE": "مکمل",
     "generatePatti": "پٹی بنائیں",
     "closeWithUnsold": "غیر فروخت شدہ کریٹس کے ساتھ واؤچر بند کریں",
-    "closeReason": "غیر فروخت شدہ کریٹس کے ساتھ بند کرنے کی وجہ"
+    "closeReason": "غیر فروخت شدہ کریٹس کے ساتھ بند کرنے کی وجہ",
+    "rateCardLocked": "ریٹ کارڈ مقفل ہے کیونکہ اس بلٹی پر پٹی جاری کی جا چکی ہے۔"
   },
   "patti": {
     "title": "پٹی",
@@ -228,7 +246,9 @@
     "advanceAdjusted": "ایڈوانس منہا",
     "closingBalance": "اختتامی بیلنس",
     "reconciliationPanel": "مصالحتی پینل (صرف مالک کے لیے)",
-    "reconciliationIdentity": "خریدار سے وصولی = قابلِ ادائیگی رقم + کمیشن + اخراجات + ریٹ فرق"
+    "reconciliationIdentity": "خریدار سے وصولی = قابلِ ادائیگی رقم + کمیشن + اخراجات + ریٹ فرق",
+    "vendorSignature": "دستخط کاشتکار",
+    "arhtiSignature": "دستخط آڑھتی"
   },
   "farm": {
     "title": "فارمز",
@@ -247,7 +267,9 @@
     "chargeCommission": "اس روانگی پر دکان کمیشن لگائیں",
     "costPerCrate": "فی کریٹ لاگت",
     "realisationPerCrate": "فی کریٹ وصولی",
-    "netResult": "خالص نتیجہ"
+    "netResult": "خالص نتیجہ",
+    "rentDue": "بقایا کرایہ",
+    "result": "نتیجہ"
   },
   "reports": {
     "title": "رپورٹس",
@@ -260,7 +282,23 @@
     "expenseRecoveryVsPaid": "اخراجات وصولی بمقابلہ ادائیگی",
     "biltiProfitability": "بلٹی منافع",
     "farmProfitLoss": "فارم منافع و نقصان",
-    "seasonClosing": "سیزن اختتامی رپورٹ"
+    "seasonClosing": "سیزن اختتامی رپورٹ",
+    "paid": "ادا شدہ",
+    "truck": "ٹرک",
+    "expenseRecovery": "اخراجات وصولی",
+    "farm": "فارم",
+    "rent": "کرایہ",
+    "net": "خالص",
+    "metric": "پیمانہ",
+    "commissionIncome": "کمیشن آمدنی",
+    "expenseGainLoss": "اخراجات منافع / (نقصان)",
+    "farmNetResult": "فارم خالص نتیجہ",
+    "totalVendorPayableClosing": "کل کاشتکار قابلِ ادائیگی (اختتامی)",
+    "totalCustomerReceivableClosing": "کل خریدار وصولی طلب (اختتامی)",
+    "lastMonthNote": "پچھلے مہینے تک۔ فی ٹرک تفصیل کے لیے بلٹی منافع رپورٹ دیکھیں۔",
+    "recoveredChargedToVendors": "وصول شدہ (کاشتکاروں سے وصول کردہ)",
+    "totalPaid": "کل ادائیگی",
+    "gainOrLoss": "منافع / (نقصان)"
   },
   "settings": {
     "title": "ترتیبات",

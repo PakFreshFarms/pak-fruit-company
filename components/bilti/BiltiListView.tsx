@@ -40,13 +40,13 @@ export function BiltiListView({ biltis }: { biltis: BiltiRow[] }) {
     { accessorKey: "itemName", header: t("bilti.itemName") },
     {
       accessorKey: "vendorNames",
-      header: "Vendors",
+      header: t("common.vendors"),
       cell: ({ getValue }) => <span className="text-xs text-muted-foreground">{(getValue() as string[]).join(", ") || "—"}</span>,
       enableSorting: false,
     },
     {
       id: "crates",
-      header: "Crates (Sold / Total)",
+      header: t("bilti.cratesSoldTotal"),
       accessorFn: (row) => row.soldCrates,
       cell: ({ row }) => (
         <div className="num">

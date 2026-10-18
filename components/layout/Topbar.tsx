@@ -1,16 +1,37 @@
 "use client";
 
-import { Languages, Moon, Sun, SunMoon, Search } from "lucide-react";
+import { Languages, Moon, Sun, SunMoon, Search, Check } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { useTheme } from "@/lib/theme/ThemeProvider";
+import { useTheme, ACCENT_COLORS, type AccentColor } from "@/lib/theme/ThemeProvider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+
+const ACCENT_SWATCH: Record<AccentColor, string> = {
+  rust: "#a8461f",
+  green: "#2f6b3f",
+  blue: "#1f5c8b",
+  purple: "#6b3fa0",
+  amber: "#a3720a",
+  teal: "#166e6e",
+};
+
+const ACCENT_LABEL_KEY: Record<AccentColor, string> = {
+  rust: "common.accentRust",
+  green: "common.accentGreen",
+  blue: "common.accentBlue",
+  purple: "common.accentPurple",
+  amber: "common.accentAmber",
+  teal: "common.accentTeal",
+};
 
 const SECTION_KEYS: Record<string, string> = {
   dashboard: "nav.dashboard",
@@ -27,7 +48,7 @@ const SECTION_KEYS: Record<string, string> = {
 
 export function Topbar({ onOpenPalette }: { onOpenPalette?: () => void }) {
   const { locale, setLocale, t } = useLocale();
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme, accent, setAccent } = useTheme();
   const pathname = usePathname();
   const section = pathname.split("/").filter(Boolean)[0] ?? "";
   const title = t(SECTION_KEYS[section] ?? "app.name");
@@ -73,6 +94,25 @@ export function Topbar({ onOpenPalette }: { onOpenPalette?: () => void }) {
             <DropdownMenuItem onClick={() => setTheme("system")}>
               <SunMoon className="size-4" /> {t("common.system")} {theme === "system" && "✓"}
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>{t("common.colorTheme")}</DropdownMenuLabel>
+            <div className="flex items-center gap-1.5 px-2 pb-2 pt-1">
+              {ACCENT_COLORS.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setAccent(c)}
+                  title={t(ACCENT_LABEL_KEY[c])}
+                  aria-label={t(ACCENT_LABEL_KEY[c])}
+                  className={cn(
+                    "flex size-6 items-center justify-center rounded-full ring-offset-2 ring-offset-card transition-transform hover:scale-110",
+                    accent === c && "ring-2 ring-foreground",
+                  )}
+                  style={{ backgroundColor: ACCENT_SWATCH[c] }}
+                >
+                  {accent === c && <Check className="size-3.5 text-white" />}
+                </button>
+              ))}
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
 

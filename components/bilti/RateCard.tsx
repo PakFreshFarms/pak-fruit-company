@@ -143,7 +143,7 @@ export function RateCard({ biltiId, expenses, locked }: { biltiId: string; expen
           ))}
         </tbody>
       </table>
-      {locked && <p className="mt-1 text-xs text-muted-foreground">Rate card is locked because a patti has already been issued on this bilti.</p>}
+      {locked && <p className="mt-1 text-xs text-muted-foreground">{t("bilti.rateCardLocked")}</p>}
     </div>
   );
 }

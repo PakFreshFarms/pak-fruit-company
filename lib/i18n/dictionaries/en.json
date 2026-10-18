@@ -78,7 +78,23 @@
     "theme": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "debit": "Debit",
+    "credit": "Credit",
+    "market": "Market",
+    "auto": "Auto",
+    "manual": "Manual",
+    "file": "File",
+    "size": "Size",
+    "item": "Item",
+    "vendors": "Vendors",
+    "colorTheme": "Colour Theme",
+    "accentRust": "Rust",
+    "accentGreen": "Green",
+    "accentBlue": "Blue",
+    "accentPurple": "Purple",
+    "accentAmber": "Amber",
+    "accentTeal": "Teal"
   },
   "vocab": {
     "arhti": "Arhti",
@@ -208,11 +224,13 @@
     "addSale": "Add Sale",
     "soldCrates": "Sold",
     "remainingCrates": "Remaining",
+    "cratesSoldTotal": "Crates (Sold / Total)",
     "status_OPEN": "Open",
     "status_COMPLETE": "Complete",
     "generatePatti": "Generate Patti",
     "closeWithUnsold": "Close voucher with unsold crates",
-    "closeReason": "Reason for closing with unsold crates"
+    "closeReason": "Reason for closing with unsold crates",
+    "rateCardLocked": "Rate card is locked because a patti has already been issued on this bilti."
   },
   "patti": {
     "title": "Patti",
@@ -228,7 +246,9 @@
     "advanceAdjusted": "Advance Adjusted",
     "closingBalance": "Closing Balance",
     "reconciliationPanel": "Reconciliation Panel (Owner Only)",
-    "reconciliationIdentity": "Customer receivable = Net payable + Commission + Expenses + Rate difference"
+    "reconciliationIdentity": "Customer receivable = Net payable + Commission + Expenses + Rate difference",
+    "vendorSignature": "Vendor Signature",
+    "arhtiSignature": "Arhti Signature"
   },
   "farm": {
     "title": "Farms",
@@ -247,7 +267,9 @@
     "chargeCommission": "Charge shop commission on this dispatch",
     "costPerCrate": "Cost per Crate",
     "realisationPerCrate": "Realisation per Crate",
-    "netResult": "Net Result"
+    "netResult": "Net Result",
+    "rentDue": "Rent Due",
+    "result": "Result"
   },
   "reports": {
     "title": "Reports",
@@ -260,7 +282,23 @@
     "expenseRecoveryVsPaid": "Expense Recovery vs Paid",
     "biltiProfitability": "Bilti Profitability",
     "farmProfitLoss": "Farm Profit & Loss",
-    "seasonClosing": "Season Closing Report"
+    "seasonClosing": "Season Closing Report",
+    "paid": "Paid",
+    "truck": "Truck",
+    "expenseRecovery": "Expense Recovery",
+    "farm": "Farm",
+    "rent": "Rent",
+    "net": "Net",
+    "metric": "Metric",
+    "commissionIncome": "Commission Income",
+    "expenseGainLoss": "Expense Gain / (Loss)",
+    "farmNetResult": "Farm Net Result",
+    "totalVendorPayableClosing": "Total Vendor Payable (closing)",
+    "totalCustomerReceivableClosing": "Total Customer Receivable (closing)",
+    "lastMonthNote": "Last month to date. See Bilti Profitability for per-truck detail.",
+    "recoveredChargedToVendors": "Recovered (charged to vendors)",
+    "totalPaid": "Total Paid",
+    "gainOrLoss": "Gain / (Loss)"
   },
   "settings": {
     "title": "Settings",
