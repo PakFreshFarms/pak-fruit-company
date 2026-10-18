@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AddLotDialog } from "./AddLotDialog";
 import { LotBlock } from "./LotBlock";
+import { VoucherSaleEntry } from "./VoucherSaleEntry";
 import { PattiButton } from "./PattiButton";
 import { updateVoucherKirayaOverrideAction } from "@/app/actions/bilti";
 import type { ComboboxAccount } from "@/components/shared/AccountCombobox";
@@ -126,8 +127,12 @@ export function VoucherBlock({ biltiId, voucher, customers }: { biltiId: string;
             {voucher.status === "OPEN" && <AddLotDialog biltiId={biltiId} voucherId={voucher.id} unassignedCrates={voucher.unassignedLotCrates} />}
           </div>
 
+          {voucher.status === "OPEN" && voucher.lots.length > 0 && (
+            <VoucherSaleEntry biltiId={biltiId} lots={voucher.lots} customers={customers} />
+          )}
+
           {voucher.lots.map((lot) => (
-            <LotBlock key={lot.id} biltiId={biltiId} lot={lot} customers={customers} voucherComplete={voucher.status === "COMPLETE"} />
+            <LotBlock key={lot.id} biltiId={biltiId} lot={lot} voucherComplete={voucher.status === "COMPLETE"} />
           ))}
 
           {voucher.status === "OPEN" && voucher.lots.length > 0 && (

@@ -17,6 +17,9 @@ export interface PostJournalInput {
   refType: string;
   refId?: string | null;
   narration: string;
+  /** i18n key under "narration.*"; when set, UIs render t(narrationKey, narrationParams) instead of the raw `narration` string, so the ledger reads correctly in whichever language is active. Omit for free-text/MANUAL entries where `narration` is exactly what the user typed. */
+  narrationKey?: string | null;
+  narrationParams?: Record<string, string | number> | null;
   createdBy: string;
   lines: JournalLineInput[];
 }
@@ -58,6 +61,8 @@ export async function postJournal(input: PostJournalInput, client: Tx | typeof p
       refType: input.refType,
       refId: input.refId ?? null,
       narration: input.narration,
+      narrationKey: input.narrationKey ?? null,
+      narrationParams: input.narrationParams ? JSON.stringify(input.narrationParams) : null,
       createdBy: input.createdBy,
       lines: {
         create: input.lines.map((l) => ({
@@ -82,7 +87,7 @@ export async function postJournal(input: PostJournalInput, client: Tx | typeof p
  */
 export async function reverseJournal(
   entryId: string,
-  opts: { narration: string; createdBy: string; date?: Date },
+  opts: { narration: string; createdBy: string; date?: Date; narrationKey?: string | null; narrationParams?: Record<string, string | number> | null },
   client: Tx | typeof prisma = prisma,
 ) {
   const original = await client.journalEntry.findUniqueOrThrow({
@@ -99,6 +104,8 @@ export async function reverseJournal(
       refType: original.refType,
       refId: original.refId,
       narration: opts.narration,
+      narrationKey: opts.narrationKey ?? null,
+      narrationParams: opts.narrationParams ? JSON.stringify(opts.narrationParams) : null,
       createdBy: opts.createdBy,
       reversalOf: original.id,
       lines: {

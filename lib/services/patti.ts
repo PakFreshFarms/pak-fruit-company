@@ -74,6 +74,8 @@ export async function generatePatti(input: GeneratePattiInput) {
         refType: "PATTI",
         refId: voucher.id,
         narration: `Patti ${pattiNo}: commission on voucher ${voucher.voucherNo}`,
+        narrationKey: "narration.pattiCommission",
+        narrationParams: { pattiNo, voucherNo: voucher.voucherNo },
         createdBy: input.createdBy,
         lines: [
           { accountId: voucher.vendorId, debit: totals.commission, credit: 0 },
@@ -90,6 +92,8 @@ export async function generatePatti(input: GeneratePattiInput) {
           refType: "PATTI",
           refId: voucher.id,
           narration: `Patti ${pattiNo}: expenses charged on voucher ${voucher.voucherNo}`,
+          narrationKey: "narration.pattiExpenses",
+          narrationParams: { pattiNo, voucherNo: voucher.voucherNo },
           createdBy: input.createdBy,
           lines: [
             { accountId: voucher.vendorId, debit: totalExpenses, credit: 0 },

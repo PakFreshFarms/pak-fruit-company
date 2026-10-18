@@ -43,7 +43,7 @@ export function CashEntryDialog({ accounts, defaultDate }: { accounts: ComboboxA
       amount: Number(values.amount),
       mode: values.mode,
       reference: values.reference || undefined,
-      narration: values.narration || (values.direction === "IN" ? "Cash received" : "Cash paid"),
+      narration: values.narration || undefined,
     });
     if (res.ok) {
       toast.success(t("common.saved"));

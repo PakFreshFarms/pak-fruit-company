@@ -4,6 +4,8 @@ import { getSystemAccountId } from "@/lib/accounting/system-accounts";
 export interface LedgerRow {
   date: Date;
   narration: string;
+  narrationKey: string | null;
+  narrationParams: Record<string, string | number> | null;
   refType: string;
   debit: number;
   credit: number;
@@ -27,6 +29,8 @@ export async function getAccountLedger(accountId: string): Promise<LedgerRow[]> 
     rows.push({
       date: line.entry.date,
       narration: line.entry.narration,
+      narrationKey: line.entry.narrationKey,
+      narrationParams: line.entry.narrationParams ? JSON.parse(line.entry.narrationParams) : null,
       refType: line.entry.refType,
       debit: line.debit,
       credit: line.credit,

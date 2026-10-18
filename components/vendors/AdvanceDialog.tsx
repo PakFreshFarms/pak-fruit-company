@@ -24,7 +24,7 @@ export function AdvanceDialog({ vendorId }: { vendorId: string }) {
       vendorId,
       amount: Number(values.amount),
       date: new Date(values.date),
-      narration: values.narration || "Vendor advance",
+      narration: values.narration || undefined,
       mode: "CASH",
     });
     if (res.ok) {

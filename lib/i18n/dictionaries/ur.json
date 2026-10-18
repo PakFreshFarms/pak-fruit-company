@@ -182,7 +182,11 @@
     "out": "نقد اخراج",
     "addEntry": "اندراج شامل کریں",
     "daySheet": "روزانہ شیٹ",
-    "monthSummary": "ماہانہ خلاصہ"
+    "monthSummary": "ماہانہ خلاصہ",
+    "source": "ذریعہ",
+    "sourceCash": "نقد",
+    "sourceFarm": "فارم",
+    "sourceOpening": "ابتدائی"
   },
   "wasooli": {
     "title": "وصولی بک",
@@ -230,7 +234,11 @@
     "generatePatti": "پٹی بنائیں",
     "closeWithUnsold": "غیر فروخت شدہ کریٹس کے ساتھ واؤچر بند کریں",
     "closeReason": "غیر فروخت شدہ کریٹس کے ساتھ بند کرنے کی وجہ",
-    "rateCardLocked": "ریٹ کارڈ مقفل ہے کیونکہ اس بلٹی پر پٹی جاری کی جا چکی ہے۔"
+    "rateCardLocked": "ریٹ کارڈ مقفل ہے کیونکہ اس بلٹی پر پٹی جاری کی جا چکی ہے۔",
+    "selectLot": "لاٹ منتخب کریں",
+    "cratesLeft": "{{n}} باقی",
+    "allLotsSold": "تمام لاٹس مکمل فروخت ہو چکیں۔",
+    "quickSaleEntry": "فوری فروخت اندراج"
   },
   "patti": {
     "title": "پٹی",
@@ -311,5 +319,31 @@
     "backupNow": "ابھی بیک اپ کریں",
     "restore": "بحال کریں",
     "restoreWarning": "بحال کرنے سے موجودہ تمام ڈیٹا بیک اپ فائل سے بدل جائے گا۔ اسے واپس نہیں کیا جا سکتا۔"
+  },
+  "narration": {
+    "saleLine": "فروخت: لاٹ {{lotName}}، {{crates}} کریٹ",
+    "pattiCommission": "پٹی {{pattiNo}}: واؤچر {{voucherNo}} پر کمیشن",
+    "pattiExpenses": "پٹی {{pattiNo}}: واؤچر {{voucherNo}} پر اخراجات",
+    "openingBalance": "ابتدائی بیلنس: {{accountName}}",
+    "farmExpense": "{{head}}{{detail}}",
+    "farmDispatchSale": "فارم ترسیل فروخت: ٹرک {{truckNo}}، {{crates}} کریٹ",
+    "farmDispatchCommission": "فارم ترسیل پر دکان کمیشن: ٹرک {{truckNo}}",
+    "reversalOfSale": "فروخت کی واپسی",
+    "cashAdvance": "کاشتکار ایڈوانس",
+    "cashRecovery": "وصولی",
+    "cashOut": "نقد ادائیگی",
+    "cashIn": "نقد وصولی"
+  },
+  "farmHead": {
+    "Mazdoori": "مزدوری",
+    "Loading": "لوڈنگ",
+    "Spray": "اسپرے",
+    "Khaad": "کھاد",
+    "Diesel": "ڈیزل",
+    "Chowkidar": "چوکیدار",
+    "Packing": "پیکنگ",
+    "Transport": "ٹرانسپورٹ",
+    "Rent": "کرایہ",
+    "Other": "دیگر"
   }
 }

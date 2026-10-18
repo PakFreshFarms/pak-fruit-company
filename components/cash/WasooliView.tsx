@@ -63,7 +63,7 @@ export function WasooliView({ entries, customers }: { entries: Entry[]; customer
       amount: Number(values.amount),
       mode: values.mode,
       reference: values.reference || undefined,
-      narration: values.narration || "Wasooli recovery",
+      narration: values.narration || undefined,
     });
     setSubmitting(false);
     if (res.ok) {
@@ -89,6 +89,7 @@ export function WasooliView({ entries, customers }: { entries: Entry[]; customer
             value={watch("customerId")}
             onChange={(id) => setValue("customerId", id)}
             placeholder="Select customer"
+            allowCreate={{ type: "CUSTOMER" }}
           />
           {selectedCustomer && (
             <div className="text-xs text-muted-foreground">

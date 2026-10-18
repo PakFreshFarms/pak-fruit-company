@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { Command } from "cmdk";
 import { searchEverything, type SearchResult } from "@/app/actions/search";
 import { useTranslation } from "@/lib/i18n/LocaleProvider";
-import { Truck, Users, ShoppingCart, Sprout } from "lucide-react";
+import { Truck, Users, ShoppingCart, Sprout, ScrollText } from "lucide-react";
 
-const ICONS = { vendor: Users, customer: ShoppingCart, bilti: Truck, farm: Sprout };
+const ICONS = { vendor: Users, customer: ShoppingCart, bilti: Truck, farm: Sprout, voucher: ScrollText };
 
 export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const [query, setQuery] = useState("");

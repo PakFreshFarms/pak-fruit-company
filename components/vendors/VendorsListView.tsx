@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { formatDistanceToNow } from "date-fns";
+import { formatWhen } from "@/lib/i18n/formatWhen";
 import type { ColumnDef } from "@tanstack/react-table";
-import { useTranslation } from "@/lib/i18n/LocaleProvider";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Money } from "@/components/shared/Money";
 import { DataTable } from "@/components/shared/DataTable";
@@ -21,7 +21,7 @@ interface VendorRow {
 }
 
 export function VendorsListView({ vendors }: { vendors: VendorRow[] }) {
-  const t = useTranslation();
+  const { t, locale } = useLocale();
 
   const columns: ColumnDef<VendorRow, unknown>[] = [
     { accessorKey: "code", header: t("common.code") },
@@ -43,7 +43,7 @@ export function VendorsListView({ vendors }: { vendors: VendorRow[] }) {
       header: t("vendor.lastActivity"),
       cell: ({ getValue }) => {
         const v = getValue() as string | null;
-        return <span className="text-xs text-muted-foreground">{v ? formatDistanceToNow(new Date(v), { addSuffix: true }) : "—"}</span>;
+        return <span className="text-xs text-muted-foreground">{v ? formatWhen(v, locale) : "—"}</span>;
       },
     },
     {

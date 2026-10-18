@@ -55,6 +55,8 @@ export async function createAccount(input: CreateAccountInput) {
           refType: "OPENING",
           refId: account.id,
           narration: `Opening balance: ${input.name}`,
+          narrationKey: "narration.openingBalance",
+          narrationParams: { accountName: input.name },
           createdBy: input.createdBy,
           lines,
         },
@@ -64,6 +66,28 @@ export async function createAccount(input: CreateAccountInput) {
 
     return account;
   });
+}
+
+async function nextAccountCode(type: "VENDOR" | "CUSTOMER") {
+  const prefix = type === "VENDOR" ? "V-" : "C-";
+  const accounts = await prisma.account.findMany({ where: { code: { startsWith: prefix } }, select: { code: true } });
+  let max = 0;
+  for (const a of accounts) {
+    const n = parseInt(a.code.slice(prefix.length), 10);
+    if (!Number.isNaN(n) && n > max) max = n;
+  }
+  return `${prefix}${String(max + 1).padStart(3, "0")}`;
+}
+
+/**
+ * Quick-add used by the inline "create new customer/vendor" option in the
+ * sale-entry combobox — a munshi meeting a new buyer mid-sale shouldn't have
+ * to leave the screen to think up an account code. Code is auto-generated;
+ * everything else (phone, address) can be filled in later from Account Heads.
+ */
+export async function createQuickAccount(type: "VENDOR" | "CUSTOMER", name: string, createdBy: string) {
+  const code = await nextAccountCode(type);
+  return createAccount({ code, name, type, createdBy });
 }
 
 export async function deactivateAccount(accountId: string) {

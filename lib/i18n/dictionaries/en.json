@@ -182,7 +182,11 @@
     "out": "Cash Out",
     "addEntry": "Add Entry",
     "daySheet": "Day Sheet",
-    "monthSummary": "Month Summary"
+    "monthSummary": "Month Summary",
+    "source": "Source",
+    "sourceCash": "Cash",
+    "sourceFarm": "Farm",
+    "sourceOpening": "Opening"
   },
   "wasooli": {
     "title": "Wasooli Book",
@@ -230,7 +234,11 @@
     "generatePatti": "Generate Patti",
     "closeWithUnsold": "Close voucher with unsold crates",
     "closeReason": "Reason for closing with unsold crates",
-    "rateCardLocked": "Rate card is locked because a patti has already been issued on this bilti."
+    "rateCardLocked": "Rate card is locked because a patti has already been issued on this bilti.",
+    "selectLot": "Select lot",
+    "cratesLeft": "{{n}} left",
+    "allLotsSold": "All lots fully sold.",
+    "quickSaleEntry": "Quick Sale Entry"
   },
   "patti": {
     "title": "Patti",
@@ -311,5 +319,31 @@
     "backupNow": "Backup Now",
     "restore": "Restore",
     "restoreWarning": "Restoring will replace all current data with the backup file. This cannot be undone."
+  },
+  "narration": {
+    "saleLine": "Sale: lot {{lotName}}, {{crates}} crate(s)",
+    "pattiCommission": "Patti {{pattiNo}}: commission on voucher {{voucherNo}}",
+    "pattiExpenses": "Patti {{pattiNo}}: expenses charged on voucher {{voucherNo}}",
+    "openingBalance": "Opening balance: {{accountName}}",
+    "farmExpense": "{{head}}{{detail}}",
+    "farmDispatchSale": "Farm dispatch sale: truck {{truckNo}}, {{crates}} crate(s)",
+    "farmDispatchCommission": "Shop commission on farm dispatch: truck {{truckNo}}",
+    "reversalOfSale": "Reversal of sale",
+    "cashAdvance": "Vendor advance",
+    "cashRecovery": "Wasooli recovery",
+    "cashOut": "Cash paid",
+    "cashIn": "Cash received"
+  },
+  "farmHead": {
+    "Mazdoori": "Mazdoori",
+    "Loading": "Loading",
+    "Spray": "Spray",
+    "Khaad": "Khaad",
+    "Diesel": "Diesel",
+    "Chowkidar": "Chowkidar",
+    "Packing": "Packing",
+    "Transport": "Transport",
+    "Rent": "Rent",
+    "Other": "Other"
   }
 }

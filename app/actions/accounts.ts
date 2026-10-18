@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/db/prisma";
-import { createAccount, deactivateAccount, deleteAccount } from "@/lib/services/accounts";
+import { createAccount, createQuickAccount, deactivateAccount, deleteAccount } from "@/lib/services/accounts";
 import { toPaisa } from "@/lib/money";
 
 const AccountSchema = z.object({
@@ -36,6 +36,26 @@ export async function createAccountAction(input: z.infer<typeof AccountSchema>):
     revalidatePath("/vendors");
     revalidatePath("/customers");
     return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Failed to create account" };
+  }
+}
+
+const QuickAccountSchema = z.object({
+  type: z.enum(["VENDOR", "CUSTOMER"]),
+  name: z.string().min(1),
+});
+
+export async function createQuickAccountAction(
+  input: z.infer<typeof QuickAccountSchema>,
+): Promise<ActionResult & { id?: string; code?: string }> {
+  const parsed = QuickAccountSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  try {
+    const account = await createQuickAccount(parsed.data.type, parsed.data.name, "owner");
+    revalidatePath("/accounts");
+    revalidatePath(parsed.data.type === "VENDOR" ? "/vendors" : "/customers");
+    return { ok: true, id: account.id, code: account.code };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Failed to create account" };
   }

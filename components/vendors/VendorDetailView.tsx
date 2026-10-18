@@ -2,6 +2,7 @@
 
 import { format } from "date-fns";
 import { useTranslation } from "@/lib/i18n/LocaleProvider";
+import { renderNarration } from "@/lib/i18n/narration";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Money } from "@/components/shared/Money";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +11,8 @@ import { AdvanceDialog } from "./AdvanceDialog";
 interface LedgerRow {
   date: string;
   narration: string;
+  narrationKey: string | null;
+  narrationParams: Record<string, string | number> | null;
   refType: string;
   debit: number;
   credit: number;
@@ -82,7 +85,7 @@ export function VendorDetailView({
           {ledger.map((row, i) => (
             <tr key={i}>
               <td>{format(new Date(row.date), "dd MMM yyyy")}</td>
-              <td>{row.narration}</td>
+              <td>{renderNarration(t, row)}</td>
               <td className="num">{row.debit > 0 ? <Money paisa={row.debit} /> : ""}</td>
               <td className="num">{row.credit > 0 ? <Money paisa={row.credit} /> : ""}</td>
               <td className="num font-medium">

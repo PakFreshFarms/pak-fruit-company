@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { format, addDays, subDays } from "date-fns";
 import { ChevronLeft, ChevronRight, Printer } from "lucide-react";
 import { useTranslation } from "@/lib/i18n/LocaleProvider";
+import { renderNarration } from "@/lib/i18n/narration";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Money } from "@/components/shared/Money";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,8 @@ interface DayLine {
   id: string;
   date: string;
   narration: string;
+  narrationKey: string | null;
+  narrationParams: Record<string, string | number> | null;
   refType: string;
   debit: number;
   credit: number;
@@ -23,12 +26,12 @@ interface DayLine {
   mode: string | null;
 }
 
-const REF_LABELS: Record<string, string> = {
-  CASH: "Cash",
-  WASOOLI: "Wasooli",
-  FARM_EXPENSE: "Farm",
-  FARM_SALE: "Farm",
-  OPENING: "Opening",
+const REF_LABEL_KEYS: Record<string, string> = {
+  CASH: "cash.sourceCash",
+  WASOOLI: "vocab.wasooli",
+  FARM_EXPENSE: "cash.sourceFarm",
+  FARM_SALE: "cash.sourceFarm",
+  OPENING: "cash.sourceOpening",
 };
 
 export function CashBookView({
@@ -93,7 +96,7 @@ export function CashBookView({
             <thead>
               <tr>
                 <th>{t("common.narration")}</th>
-                <th>Source</th>
+                <th>{t("cash.source")}</th>
                 <th>{t("common.mode")}</th>
                 <th className="num">{t("cash.in")}</th>
                 <th className="num">{t("cash.out")}</th>
@@ -103,10 +106,10 @@ export function CashBookView({
               {lines.map((l) => (
                 <tr key={l.id}>
                   <td>
-                    {l.narration}
+                    {renderNarration(t, l)}
                     {l.contraName && <span className="text-muted-foreground"> — {l.contraName}</span>}
                   </td>
-                  <td className="text-xs text-muted-foreground">{REF_LABELS[l.refType] ?? l.refType}</td>
+                  <td className="text-xs text-muted-foreground">{REF_LABEL_KEYS[l.refType] ? t(REF_LABEL_KEYS[l.refType]) : l.refType}</td>
                   <td className="text-xs text-muted-foreground">{l.mode ?? "—"}</td>
                   <td className="num">{l.debit > 0 ? <Money paisa={l.debit} /> : ""}</td>
                   <td className="num">{l.credit > 0 ? <Money paisa={l.credit} /> : ""}</td>

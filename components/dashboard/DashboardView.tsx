@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslation } from "@/lib/i18n/LocaleProvider";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { formatWhen } from "@/lib/i18n/formatWhen";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Money } from "@/components/shared/Money";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { formatDistanceToNow } from "date-fns";
 import { Wallet, ShoppingCart, Coins, Scale, Truck, TrendingUp, ScrollText, Clock } from "lucide-react";
 
 interface Props {
@@ -38,7 +38,7 @@ function StatCard({ icon: Icon, label, value, tone }: { icon: React.ElementType;
 }
 
 export function DashboardView(props: Props) {
-  const t = useTranslation();
+  const { t, locale } = useLocale();
   const gap = props.payable - props.receivable;
 
   return (
@@ -108,7 +108,7 @@ export function DashboardView(props: Props) {
                           {c.name}
                         </Link>
                       </td>
-                      <td className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(c.oldestDate), { addSuffix: true })}</td>
+                      <td className="text-xs text-muted-foreground">{formatWhen(c.oldestDate, locale)}</td>
                       <td className="num">
                         <Money paisa={c.balance} />
                       </td>

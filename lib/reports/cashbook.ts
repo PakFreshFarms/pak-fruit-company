@@ -6,6 +6,8 @@ export interface CashDayLine {
   id: string;
   date: Date;
   narration: string;
+  narrationKey: string | null;
+  narrationParams: Record<string, string | number> | null;
   refType: string;
   debit: number;
   credit: number;
@@ -39,6 +41,8 @@ export async function getCashInHandDayLines(date: Date): Promise<CashDayLine[]> 
       id: l.id,
       date: l.entry.date,
       narration: l.entry.narration,
+      narrationKey: l.entry.narrationKey,
+      narrationParams: l.entry.narrationParams ? JSON.parse(l.entry.narrationParams) : null,
       refType: l.entry.refType,
       debit: l.debit,
       credit: l.credit,

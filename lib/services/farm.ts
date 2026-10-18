@@ -21,11 +21,14 @@ export async function createFarmExpense(input: CreateFarmExpenseInput) {
     const farmExpenseAccountId = await getSystemAccountId("FARM_EXPENSES", tx);
     const cashAccountId = await getSystemAccountId("CASH_IN_HAND", tx);
 
+    const detail = `${input.payeeName ? " — " + input.payeeName : ""}${input.narration ? ": " + input.narration : ""}`;
     const entry = await postJournal(
       {
         date: input.date,
         refType: "FARM_EXPENSE",
-        narration: `${input.head}${input.payeeName ? " — " + input.payeeName : ""}${input.narration ? ": " + input.narration : ""}`,
+        narration: `${input.head}${detail}`,
+        narrationKey: "narration.farmExpense",
+        narrationParams: { head: input.head, detail },
         createdBy: input.createdBy,
         lines: [
           { accountId: farmExpenseAccountId, debit: input.amount, credit: 0, farmId: input.farmId },
@@ -53,7 +56,7 @@ export async function createFarmExpense(input: CreateFarmExpenseInput) {
 /** Rent is a farm expense too — posts the same way and increments Farm.rentPaid. */
 export async function payFarmRent(input: { farmId: string; amount: number; date: Date; createdBy: string }) {
   return prisma.$transaction(async (tx) => {
-    const expense = await createFarmExpense({ ...input, head: "Rent", narration: "Farm rent payment" });
+    const expense = await createFarmExpense({ ...input, head: "Rent" });
     await tx.farm.update({ where: { id: input.farmId }, data: { rentPaid: { increment: input.amount } } });
     return expense;
   });
@@ -113,6 +116,8 @@ export async function recordDispatchSale(input: RecordDispatchSaleInput) {
         refType: "FARM_SALE",
         refId: dispatch.id,
         narration: `Farm dispatch sale: truck ${dispatch.truckNo}, ${dispatch.crates} crate(s)`,
+        narrationKey: "narration.farmDispatchSale",
+        narrationParams: { truckNo: dispatch.truckNo, crates: dispatch.crates },
         createdBy: input.createdBy,
         lines: [
           { accountId: cashAccountId, debit: input.netSaleAmount, credit: 0 },
@@ -133,6 +138,8 @@ export async function recordDispatchSale(input: RecordDispatchSaleInput) {
             refType: "FARM_SALE",
             refId: dispatch.id,
             narration: `Shop commission on farm dispatch: truck ${dispatch.truckNo}`,
+            narrationKey: "narration.farmDispatchCommission",
+            narrationParams: { truckNo: dispatch.truckNo },
             createdBy: input.createdBy,
             lines: [
               { accountId: farmIncomeAccountId, debit: commission, credit: 0, farmId: dispatch.farmId },

@@ -69,7 +69,13 @@ export function AddVoucherDialog({ biltiId, vendors, unassignedCrates }: { bilti
           </div>
           <div className="flex flex-col gap-1.5">
             <Label>{t("vocab.vendor")}</Label>
-            <AccountCombobox accounts={vendors} value={watch("vendorId")} onChange={(id) => setValue("vendorId", id)} placeholder="Select vendor" />
+            <AccountCombobox
+              accounts={vendors}
+              value={watch("vendorId")}
+              onChange={(id) => setValue("vendorId", id)}
+              placeholder="Select vendor"
+              allowCreate={{ type: "VENDOR" }}
+            />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1.5">

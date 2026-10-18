@@ -37,7 +37,7 @@ export function RecoveryDialog({ customerId, triggerLabel }: { customerId: strin
       amount: Number(values.amount),
       mode: values.mode,
       reference: values.reference || undefined,
-      narration: values.narration || "Wasooli recovery",
+      narration: values.narration || undefined,
     });
     if (res.ok) {
       toast.success(t("common.saved"));

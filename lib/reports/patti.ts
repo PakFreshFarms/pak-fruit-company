@@ -26,12 +26,15 @@ export async function getPattiData(voucherId: string) {
   const closingBalance = await getAccountBalance(voucher.vendorId);
   const previousBalance = closingBalance + totals.netPayable;
 
+  const entryDateFilter = { isReversed: false, ...(voucher.pattiDate ? { date: { lte: voucher.pattiDate } } : {}) };
   const advanceLines = await prisma.journalLine.findMany({
     where: {
       accountId: voucher.vendorId,
       debit: { gt: 0 },
-      narration: { contains: "advance" },
-      entry: { isReversed: false, ...(voucher.pattiDate ? { date: { lte: voucher.pattiDate } } : {}) },
+      OR: [
+        { entry: { ...entryDateFilter, narrationKey: "narration.cashAdvance" } },
+        { entry: entryDateFilter, narration: { contains: "advance" } },
+      ],
     },
   });
   const advanceAdjusted = advanceLines.reduce((s, l) => s + l.debit, 0);

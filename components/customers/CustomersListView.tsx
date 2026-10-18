@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { formatDistanceToNow } from "date-fns";
+import { formatWhen } from "@/lib/i18n/formatWhen";
 import type { ColumnDef } from "@tanstack/react-table";
-import { useTranslation } from "@/lib/i18n/LocaleProvider";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Money } from "@/components/shared/Money";
 import { DataTable } from "@/components/shared/DataTable";
@@ -21,7 +21,7 @@ interface CustomerRow {
 }
 
 export function CustomersListView({ customers }: { customers: CustomerRow[] }) {
-  const t = useTranslation();
+  const { t, locale } = useLocale();
 
   const columns: ColumnDef<CustomerRow, unknown>[] = [
     { accessorKey: "code", header: t("common.code") },
@@ -43,7 +43,7 @@ export function CustomersListView({ customers }: { customers: CustomerRow[] }) {
       header: t("vendor.lastActivity"),
       cell: ({ getValue }) => {
         const v = getValue() as string | null;
-        return <span className="text-xs text-muted-foreground">{v ? formatDistanceToNow(new Date(v), { addSuffix: true }) : "—"}</span>;
+        return <span className="text-xs text-muted-foreground">{v ? formatWhen(v, locale) : "—"}</span>;
       },
     },
     {

@@ -24,12 +24,15 @@ export async function getTrialBalance() {
 export async function getCommissionByVendor(from: Date, to: Date) {
   const commissionId = await getSystemAccountId("COMMISSION_INCOME");
   const lines = await prisma.journalLine.findMany({
-    where: { accountId: { not: commissionId }, entry: { refType: "PATTI", isReversed: false, date: { gte: from, lte: to } }, debit: { gt: 0 } },
+    where: {
+      accountId: { not: commissionId },
+      entry: { refType: "PATTI", narrationKey: "narration.pattiCommission", isReversed: false, date: { gte: from, lte: to } },
+      debit: { gt: 0 },
+    },
     include: { account: true, entry: true },
   });
   const byVendor = new Map<string, { vendorName: string; commission: number }>();
   for (const line of lines) {
-    if (!line.entry.narration.includes("commission")) continue;
     const key = line.accountId;
     const existing = byVendor.get(key) ?? { vendorName: line.account.name, commission: 0 };
     existing.commission += line.debit;

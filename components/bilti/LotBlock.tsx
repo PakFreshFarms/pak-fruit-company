@@ -6,9 +6,7 @@ import { useTranslation } from "@/lib/i18n/LocaleProvider";
 import { Money } from "@/components/shared/Money";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { SaleEntryRow } from "./SaleEntryRow";
 import { deleteSaleAction } from "@/app/actions/sales";
-import type { ComboboxAccount } from "@/components/shared/AccountCombobox";
 import { X } from "lucide-react";
 
 interface Sale {
@@ -29,7 +27,7 @@ interface LotData {
   sales: Sale[];
 }
 
-export function LotBlock({ biltiId, lot, customers, voucherComplete }: { biltiId: string; lot: LotData; customers: ComboboxAccount[]; voucherComplete: boolean }) {
+export function LotBlock({ biltiId, lot, voucherComplete }: { biltiId: string; lot: LotData; voucherComplete: boolean }) {
   const t = useTranslation();
   const remaining = lot.crates - lot.soldCrates;
 
@@ -94,7 +92,6 @@ export function LotBlock({ biltiId, lot, customers, voucherComplete }: { biltiId
               </tr>
             );
           })}
-          {!voucherComplete && <SaleEntryRow biltiId={biltiId} lotId={lot.id} reportRate={lot.reportRate} remaining={remaining} customers={customers} />}
         </tbody>
       </table>
     </div>

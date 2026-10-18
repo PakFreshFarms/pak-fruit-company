@@ -14,14 +14,16 @@ const CashEntrySchema = z.object({
   amount: z.coerce.number().positive(),
   mode: z.enum(["CASH", "BANK", "CHEQUE", "ONLINE"]),
   reference: z.string().optional(),
-  narration: z.string().min(1),
+  narration: z.string().optional(),
 });
 
 export async function createCashEntryAction(input: z.infer<typeof CashEntrySchema>): Promise<ActionResult> {
   const parsed = CashEntrySchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   try {
-    await createCashEntry({ ...parsed.data, amount: toPaisa(parsed.data.amount), createdBy: "owner" });
+    const narrationKey =
+      parsed.data.book === "WASOOLI" ? "narration.cashRecovery" : parsed.data.direction === "IN" ? "narration.cashIn" : "narration.cashOut";
+    await createCashEntry({ ...parsed.data, narrationKey, amount: toPaisa(parsed.data.amount), createdBy: "owner" });
     revalidatePath("/cash-book");
     revalidatePath("/wasooli");
     revalidatePath("/dashboard");

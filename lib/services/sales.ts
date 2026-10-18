@@ -75,6 +75,8 @@ export async function createSale(input: CreateSaleInput) {
         refType: "BILTI_SALE",
         refId: sale.id,
         narration: `Sale: lot ${lot.name}, ${input.crates} crate(s)`,
+        narrationKey: "narration.saleLine",
+        narrationParams: { lotName: lot.name, crates: input.crates },
         createdBy: input.createdBy,
         lines: lines.map((l) => ({
           ...l,
@@ -93,7 +95,11 @@ export async function deleteSaleWithReversal(saleId: string, createdBy: string) 
   return prisma.$transaction(async (tx) => {
     const sale = await tx.sale.findUniqueOrThrow({ where: { id: saleId } });
     if (sale.journalEntryId) {
-      await reverseJournal(sale.journalEntryId, { narration: `Reversal of sale ${saleId}`, createdBy }, tx);
+      await reverseJournal(
+        sale.journalEntryId,
+        { narration: `Reversal of sale ${saleId}`, narrationKey: "narration.reversalOfSale", createdBy },
+        tx,
+      );
     }
     return tx.sale.delete({ where: { id: saleId } });
   });

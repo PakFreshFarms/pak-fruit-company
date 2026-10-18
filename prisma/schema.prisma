@@ -70,17 +70,19 @@ model Account {
 }
 
 model JournalEntry {
-  id         String        @id @default(cuid())
-  date       DateTime
-  refType    String // BILTI_SALE, PATTI, CASH, WASOOLI, ADVANCE, FARM_EXPENSE, FARM_SALE, OPENING, MANUAL
-  refId      String?
-  narration  String
-  isPosted   Boolean       @default(true)
-  isReversed Boolean       @default(false)
-  reversalOf String?
-  createdAt  DateTime      @default(now())
-  createdBy  String
-  lines      JournalLine[]
+  id             String        @id @default(cuid())
+  date           DateTime
+  refType        String // BILTI_SALE, PATTI, CASH, WASOOLI, ADVANCE, FARM_EXPENSE, FARM_SALE, OPENING, MANUAL
+  refId          String?
+  narration      String // English fallback — used verbatim for MANUAL/free-text entries, and as a fallback for entries with no narrationKey
+  narrationKey   String? // i18n dictionary key under "narration.*" — when set, UIs render t(narrationKey, narrationParams) instead of `narration`, so the ledger reads in whichever language is active
+  narrationParams String? // JSON-encoded Record<string, string | number> substituted into the narrationKey template
+  isPosted       Boolean       @default(true)
+  isReversed     Boolean       @default(false)
+  reversalOf     String?
+  createdAt      DateTime      @default(now())
+  createdBy      String
+  lines          JournalLine[]
 
   @@index([refType, refId])
   @@index([date])
