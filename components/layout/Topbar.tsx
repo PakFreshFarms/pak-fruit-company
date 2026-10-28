@@ -1,6 +1,6 @@
 "use client";
 
-import { Languages, Moon, Sun, SunMoon, Search, Check } from "lucide-react";
+import { Languages, Moon, Sun, SunMoon, Search, Check, LogOut, User as UserIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useTheme, ACCENT_COLORS, type AccentColor } from "@/lib/theme/ThemeProvider";
@@ -14,6 +14,8 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { logoutAction } from "@/app/actions/auth";
+import type { SessionUser } from "@/lib/auth/session";
 
 const ACCENT_SWATCH: Record<AccentColor, string> = {
   rust: "#a8461f",
@@ -46,7 +48,7 @@ const SECTION_KEYS: Record<string, string> = {
   settings: "nav.settings",
 };
 
-export function Topbar({ onOpenPalette }: { onOpenPalette?: () => void }) {
+export function Topbar({ onOpenPalette, user }: { onOpenPalette?: () => void; user: SessionUser }) {
   const { locale, setLocale, t } = useLocale();
   const { theme, setTheme, resolvedTheme, accent, setAccent } = useTheme();
   const pathname = usePathname();
@@ -119,6 +121,24 @@ export function Topbar({ onOpenPalette }: { onOpenPalette?: () => void }) {
         <div className="flex items-center gap-1 text-muted-foreground">
           <Languages className="size-4" />
         </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <UserIcon className="size-3.5" />
+              <span className="hidden sm:inline">{user.name}</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>
+              {user.name} · {user.role === "OWNER" ? t("auth.owner") : t("auth.munshi")}
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => { void logoutAction(); }}>
+              <LogOut className="size-4" /> {t("auth.signOut")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

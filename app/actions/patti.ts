@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { generatePatti } from "@/lib/services/patti";
+import { requireSessionUser } from "@/lib/auth/session";
 import type { ActionResult } from "./accounts";
 
 const GeneratePattiSchema = z.object({
@@ -13,12 +14,13 @@ const GeneratePattiSchema = z.object({
 });
 
 export async function generatePattiAction(input: z.infer<typeof GeneratePattiSchema>): Promise<ActionResult & { pattiNo?: string }> {
-  const parsed = GeneratePattiSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   try {
+    const user = await requireSessionUser();
+    const parsed = GeneratePattiSchema.safeParse(input);
+    if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
     const { pattiNo } = await generatePatti({
       voucherId: parsed.data.voucherId,
-      createdBy: "owner",
+      createdBy: user.name,
       closeWithUnsold: parsed.data.closeWithUnsold,
       closeReason: parsed.data.closeReason,
     });

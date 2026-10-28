@@ -6,6 +6,17 @@ import { useTranslation } from "@/lib/i18n/LocaleProvider";
 import { Money } from "@/components/shared/Money";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { deleteSaleAction } from "@/app/actions/sales";
 import { X } from "lucide-react";
 
@@ -84,9 +95,23 @@ export function LotBlock({ biltiId, lot, voucherComplete }: { biltiId: string; l
                 </td>
                 <td>
                   {!voucherComplete && (
-                    <Button variant="ghost" size="icon" className="size-6" onClick={() => handleDelete(s.id)} title={t("common.reverse")}>
-                      <X className="size-3.5" />
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="ghost" size="icon" className="size-6" title={t("common.reverse")}>
+                          <X className="size-3.5" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>{t("common.confirmDeleteSaleTitle")}</AlertDialogTitle>
+                          <AlertDialogDescription>{t("common.confirmDeleteSaleDescription")}</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => handleDelete(s.id)}>{t("common.confirm")}</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   )}
                 </td>
               </tr>

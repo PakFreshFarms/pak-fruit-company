@@ -19,6 +19,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
+    "deactivate": "Deactivate",
     "edit": "Edit",
     "add": "Add",
     "new": "New",
@@ -37,6 +38,10 @@
     "close": "Close",
     "confirm": "Confirm",
     "back": "Back",
+    "confirmDeleteSaleTitle": "Cancel this sale?",
+    "confirmDeleteSaleDescription": "This reverses its ledger entry and frees up the crates for resale. It stays visible in the audit view as cancelled.",
+    "confirmDeactivateAccountTitle": "Deactivate this account?",
+    "confirmDeactivateAccountDescription": "It will be hidden from pickers and active lists. Its history and balance are kept and still visible in Account Heads.",
     "loading": "Loading...",
     "noResults": "No results found",
     "yes": "Yes",
@@ -277,7 +282,11 @@
     "realisationPerCrate": "Realisation per Crate",
     "netResult": "Net Result",
     "rentDue": "Rent Due",
-    "result": "Result"
+    "result": "Result",
+    "closeSeason": "Close Season",
+    "seasonClosed": "Season closed",
+    "confirmCloseSeasonTitle": "Close this season?",
+    "confirmCloseSeasonDescription": "This is permanent — no further expenses, dispatches, or rent payments can be recorded against this farm afterward. Only the Owner can do this."
   },
   "reports": {
     "title": "Reports",
@@ -291,6 +300,12 @@
     "biltiProfitability": "Bilti Profitability",
     "farmProfitLoss": "Farm Profit & Loss",
     "seasonClosing": "Season Closing Report",
+    "cancelledSales": "Cancelled Sales (Audit)",
+    "cancelledBy": "Cancelled By",
+    "cancelledAt": "Cancelled At",
+    "lot": "Lot",
+    "vendor": "Vendor",
+    "noCancelledSales": "No sales have been cancelled.",
     "paid": "Paid",
     "truck": "Truck",
     "expenseRecovery": "Expense Recovery",
@@ -345,5 +360,20 @@
     "Transport": "Transport",
     "Rent": "Rent",
     "Other": "Other"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "whoAreYou": "Who's working today?",
+    "pin": "PIN",
+    "enterPin": "Enter your PIN",
+    "signInButton": "Sign in",
+    "wrongPin": "Wrong PIN",
+    "accountInactive": "This account is no longer active",
+    "signOut": "Sign out",
+    "owner": "Owner",
+    "munshi": "Munshi",
+    "backToUserList": "Back",
+    "forbiddenOwnerOnly": "Only the Owner can do this",
+    "notSignedIn": "You must be signed in to do this"
   }
 }

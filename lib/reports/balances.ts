@@ -61,7 +61,7 @@ export async function getNetRateDifference() {
 export async function getOpenBiltisWithUnsoldCrates() {
   const biltis = await prisma.bilti.findMany({
     where: { status: "OPEN" },
-    include: { vouchers: { include: { lots: { include: { sales: true } } } } },
+    include: { vouchers: { include: { lots: { include: { sales: { where: { cancelledAt: null } } } } } } },
     orderBy: { date: "desc" },
   });
   return biltis.filter((b) =>
@@ -72,7 +72,7 @@ export async function getOpenBiltisWithUnsoldCrates() {
 export async function getVouchersAwaitingPatti(limit = 10) {
   const vouchers = await prisma.voucher.findMany({
     where: { status: "OPEN" },
-    include: { vendor: true, bilti: true, lots: { include: { sales: true } } },
+    include: { vendor: true, bilti: true, lots: { include: { sales: { where: { cancelledAt: null } } } } },
     orderBy: { createdAt: "desc" },
     take: limit,
   });
@@ -88,7 +88,7 @@ export async function getOldestOutstandingCustomers(limit = 5) {
   const outstanding = rows.filter((r) => r.balance > 0);
   const withOldest = await Promise.all(
     outstanding.map(async (r) => {
-      const oldestSale = await prisma.sale.findFirst({ where: { customerId: r.account.id }, orderBy: { date: "asc" } });
+      const oldestSale = await prisma.sale.findFirst({ where: { customerId: r.account.id, cancelledAt: null }, orderBy: { date: "asc" } });
       return { ...r, oldestDate: oldestSale?.date ?? null };
     }),
   );

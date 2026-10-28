@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Noto_Nastaliq_Urdu, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 import { ThemeProvider } from "@/lib/theme/ThemeProvider";
@@ -10,10 +11,15 @@ const body = Inter({
   subsets: ["latin"],
 });
 
-const nastaliq = Noto_Nastaliq_Urdu({
+// Vendored in public/fonts (SIL Open Font License — see LICENSE.txt there)
+// instead of next/font/google, so the Urdu interface never needs internet
+// at build time, not even on first launch.
+const nastaliq = localFont({
   variable: "--font-nastaliq",
-  subsets: ["arabic"],
-  weight: ["400", "700"],
+  src: [
+    { path: "../public/fonts/noto-nastaliq-urdu/noto-nastaliq-urdu-arabic-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/noto-nastaliq-urdu/noto-nastaliq-urdu-arabic-700-normal.woff2", weight: "700", style: "normal" },
+  ],
 });
 
 export const metadata: Metadata = {

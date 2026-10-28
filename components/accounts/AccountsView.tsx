@@ -9,6 +9,17 @@ import { Input } from "@/components/ui/input";
 import { AccountFormDialog } from "./AccountFormDialog";
 import { deactivateAccountAction } from "@/app/actions/accounts";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import type { AccountType } from "@prisma/client";
 
@@ -87,9 +98,23 @@ export function AccountsView({ accounts }: { accounts: AccountRow[] }) {
                     </td>
                     <td>
                       {!a.isSystem && a.isActive && (
-                        <Button variant="ghost" size="sm" onClick={() => handleDeactivate(a.id)}>
-                          {t("common.delete")}
-                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              {t("common.deactivate")}
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>{t("common.confirmDeactivateAccountTitle")}</AlertDialogTitle>
+                              <AlertDialogDescription>{t("common.confirmDeactivateAccountDescription")}</AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDeactivate(a.id)}>{t("common.confirm")}</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       )}
                     </td>
                   </tr>

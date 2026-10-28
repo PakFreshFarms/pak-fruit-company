@@ -18,6 +18,9 @@ export interface CreateFarmExpenseInput {
 export async function createFarmExpense(input: CreateFarmExpenseInput) {
   if (input.amount <= 0) throw new Error("Amount must be greater than zero");
   return prisma.$transaction(async (tx) => {
+    const farm = await tx.farm.findUniqueOrThrow({ where: { id: input.farmId } });
+    if (farm.isClosed) throw new Error("This farm's season is closed — no further expenses can be recorded");
+
     const farmExpenseAccountId = await getSystemAccountId("FARM_EXPENSES", tx);
     const cashAccountId = await getSystemAccountId("CASH_IN_HAND", tx);
 
@@ -74,6 +77,8 @@ export interface CreateFarmDispatchInput {
 
 /** A dispatch starts PENDING with no journal entry — the fruit hasn't sold yet. */
 export async function createFarmDispatch(input: CreateFarmDispatchInput) {
+  const farm = await prisma.farm.findUniqueOrThrow({ where: { id: input.farmId } });
+  if (farm.isClosed) throw new Error("This farm's season is closed — no further dispatches can be recorded");
   return prisma.farmDispatch.create({
     data: {
       farmId: input.farmId,
@@ -106,6 +111,9 @@ export async function recordDispatchSale(input: RecordDispatchSaleInput) {
   return prisma.$transaction(async (tx) => {
     const dispatch = await tx.farmDispatch.findUniqueOrThrow({ where: { id: input.dispatchId } });
     if (dispatch.status === "RECEIVED") throw new Error("This dispatch has already been recorded as received");
+
+    const farm = await tx.farm.findUniqueOrThrow({ where: { id: dispatch.farmId } });
+    if (farm.isClosed) throw new Error("This farm's season is closed — no further sales can be recorded");
 
     const cashAccountId = await getSystemAccountId("CASH_IN_HAND", tx);
     const farmIncomeAccountId = await getSystemAccountId("FARM_INCOME", tx);

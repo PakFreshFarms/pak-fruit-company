@@ -11,11 +11,22 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { AddExpenseDialog } from "./AddExpenseDialog";
 import { QuickExpenseDialog } from "./QuickExpenseDialog";
 import { AddDispatchDialog } from "./AddDispatchDialog";
 import { RecordSaleDialog } from "./RecordSaleDialog";
-import { payFarmRentAction } from "@/app/actions/farm";
+import { payFarmRentAction, closeFarmSeasonAction } from "@/app/actions/farm";
 
 interface Expense {
   id: string;
@@ -52,15 +63,18 @@ export function FarmDetailView({
   expenses,
   dispatches,
   summary,
+  isOwner,
 }: {
   farm: { id: string; name: string; season: string; landownerName: string; rentAmount: number; rentPaid: number; isClosed: boolean };
   expenses: Expense[];
   dispatches: Dispatch[];
   summary: Summary;
+  isOwner: boolean;
 }) {
   const t = useTranslation();
   const [rentAmount, setRentAmount] = useState("");
   const [payingRent, setPayingRent] = useState(false);
+  const [closing, setClosing] = useState(false);
   const rentDue = farm.rentAmount - farm.rentPaid;
 
   async function payRent() {
@@ -75,9 +89,43 @@ export function FarmDetailView({
     }
   }
 
+  async function closeSeason() {
+    setClosing(true);
+    const res = await closeFarmSeasonAction(farm.id);
+    setClosing(false);
+    if (res.ok) toast.success(t("common.saved"));
+    else toast.error(res.error ?? t("common.error"));
+  }
+
   return (
     <div>
-      <PageHeader title={farm.name} subtitle={`${farm.season} · ${farm.landownerName}`} />
+      <PageHeader
+        title={farm.name}
+        subtitle={`${farm.season} · ${farm.landownerName}`}
+        actions={
+          !farm.isClosed && isOwner ? (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" disabled={closing}>
+                  {t("farm.closeSeason")}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>{t("farm.confirmCloseSeasonTitle")}</AlertDialogTitle>
+                  <AlertDialogDescription>{t("farm.confirmCloseSeasonDescription")}</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+                  <AlertDialogAction onClick={closeSeason}>{t("common.confirm")}</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          ) : farm.isClosed ? (
+            <Badge variant="outline">{t("farm.seasonClosed")}</Badge>
+          ) : undefined
+        }
+      />
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Card>

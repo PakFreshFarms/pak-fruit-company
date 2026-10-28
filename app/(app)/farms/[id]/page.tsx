@@ -1,16 +1,18 @@
 import { notFound } from "next/navigation";
 import { getFarmSummary } from "@/lib/reports/farm";
 import { FarmDetailView } from "@/components/farms/FarmDetailView";
+import { getCurrentUser } from "@/lib/auth/session";
 
 export const dynamic = "force-dynamic";
 
 export default async function FarmDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const summary = await getFarmSummary(id).catch(() => null);
+  const [summary, user] = await Promise.all([getFarmSummary(id).catch(() => null), getCurrentUser()]);
   if (!summary) notFound();
 
   return (
     <FarmDetailView
+      isOwner={user?.role === "OWNER"}
       farm={{
         id: summary.farm.id,
         name: summary.farm.name,

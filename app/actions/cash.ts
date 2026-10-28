@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createCashEntry, payVendorAdvance } from "@/lib/services/cash";
 import { toPaisa } from "@/lib/money";
+import { requireSessionUser } from "@/lib/auth/session";
 import type { ActionResult } from "./accounts";
 
 const CashEntrySchema = z.object({
@@ -18,12 +19,13 @@ const CashEntrySchema = z.object({
 });
 
 export async function createCashEntryAction(input: z.infer<typeof CashEntrySchema>): Promise<ActionResult> {
-  const parsed = CashEntrySchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   try {
+    const user = await requireSessionUser();
+    const parsed = CashEntrySchema.safeParse(input);
+    if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
     const narrationKey =
       parsed.data.book === "WASOOLI" ? "narration.cashRecovery" : parsed.data.direction === "IN" ? "narration.cashIn" : "narration.cashOut";
-    await createCashEntry({ ...parsed.data, narrationKey, amount: toPaisa(parsed.data.amount), createdBy: "owner" });
+    await createCashEntry({ ...parsed.data, narrationKey, amount: toPaisa(parsed.data.amount), createdBy: user.name });
     revalidatePath("/cash-book");
     revalidatePath("/wasooli");
     revalidatePath("/dashboard");
@@ -45,10 +47,11 @@ const AdvanceSchema = z.object({
 });
 
 export async function payVendorAdvanceAction(input: z.infer<typeof AdvanceSchema>): Promise<ActionResult> {
-  const parsed = AdvanceSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   try {
-    await payVendorAdvance({ ...parsed.data, amount: toPaisa(parsed.data.amount), createdBy: "owner" });
+    const user = await requireSessionUser();
+    const parsed = AdvanceSchema.safeParse(input);
+    if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+    await payVendorAdvance({ ...parsed.data, amount: toPaisa(parsed.data.amount), createdBy: user.name });
     revalidatePath("/vendors");
     revalidatePath("/cash-book");
     revalidatePath("/dashboard");
