@@ -68,7 +68,7 @@ export async function getExpenseRecoveryVsPaid() {
 
 export async function getBiltiProfitability() {
   const biltis = await prisma.bilti.findMany({
-    include: { vouchers: { include: { lots: { include: { sales: true } } } } },
+    include: { vouchers: { include: { lots: { include: { sales: { where: { cancelledAt: null } } } } } } },
     orderBy: { date: "desc" },
   });
 
@@ -135,4 +135,25 @@ export async function getSeasonClosingReport(from: Date, to: Date) {
     totalVendorPayable,
     totalCustomerReceivable,
   };
+}
+
+/** Audit view: sales cancelled (soft-deleted) by anyone, newest first. Spec §4.2/§10 — a cancelled sale is never erased, so it must stay visible here even though it's excluded from every working total. */
+export async function getCancelledSales() {
+  const sales = await prisma.sale.findMany({
+    where: { cancelledAt: { not: null } },
+    include: { customer: true, lot: { include: { voucher: { include: { vendor: true, bilti: true } } } } },
+    orderBy: { cancelledAt: "desc" },
+  });
+  return sales.map((s) => ({
+    id: s.id,
+    date: s.date,
+    lotName: s.lot.name,
+    biltiNo: s.lot.voucher.bilti.biltiNo,
+    vendorName: s.lot.voucher.vendor.name,
+    customerName: s.customer.name,
+    crates: s.crates,
+    actualRate: s.actualRate,
+    cancelledAt: s.cancelledAt!,
+    cancelledBy: s.cancelledBy,
+  }));
 }

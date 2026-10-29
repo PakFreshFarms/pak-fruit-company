@@ -6,6 +6,7 @@ import { createSale } from "../lib/services/sales";
 import { generatePatti } from "../lib/services/patti";
 import { setSetting } from "../lib/settings";
 import { prisma } from "../lib/db/prisma";
+import { hashPin } from "../lib/auth/password";
 
 const SEED_USER = "seed";
 
@@ -30,8 +31,9 @@ async function seedSystemAccounts() {
 async function seedOwnerUser() {
   const existing = await prisma.user.findFirst({ where: { role: "OWNER" } });
   if (existing) return;
+  const pinHash = await hashPin("0000");
   await prisma.user.create({
-    data: { name: "Owner", role: "OWNER", pin: "0000" },
+    data: { name: "Owner", role: "OWNER", pinHash },
   });
   console.log("Seeded default owner user (PIN 0000 — change this in Settings)");
 }

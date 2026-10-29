@@ -1,16 +1,18 @@
 import { notFound } from "next/navigation";
 import { getPattiData } from "@/lib/reports/patti";
 import { PattiView } from "@/components/patti/PattiView";
+import { getCurrentUser } from "@/lib/auth/session";
 
 export const dynamic = "force-dynamic";
 
 export default async function PattiPage({ params }: { params: Promise<{ id: string; voucherId: string }> }) {
   const { voucherId } = await params;
-  const data = await getPattiData(voucherId).catch(() => null);
+  const [data, user] = await Promise.all([getPattiData(voucherId).catch(() => null), getCurrentUser()]);
   if (!data || !data.voucher.pattiNo) notFound();
 
   return (
     <PattiView
+      isOwner={user?.role === "OWNER"}
       shopName={data.shopName}
       shopAddress={data.shopAddress}
       pattiNo={data.voucher.pattiNo!}

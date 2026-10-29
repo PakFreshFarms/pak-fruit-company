@@ -11,6 +11,13 @@ export class VoucherNotFullySoldError extends Error {
   }
 }
 
+export class ReconciliationError extends Error {
+  constructor(actualTotal: number, identityRhs: number) {
+    super(`Patti does not reconcile (rule 6.8): actual total ${actualTotal} paisa != net payable + commission + expenses + rate difference (${identityRhs} paisa). Nothing was posted.`);
+    this.name = "ReconciliationError";
+  }
+}
+
 async function nextPattiNo(tx: Tx | typeof prisma) {
   const count = await tx.voucher.count({ where: { pattiNo: { not: null } } });
   return `PT-${String(count + 1).padStart(5, "0")}`;
@@ -29,7 +36,7 @@ export async function generatePatti(input: GeneratePattiInput) {
     const voucher = await tx.voucher.findUniqueOrThrow({
       where: { id: input.voucherId },
       include: {
-        lots: { include: { sales: true } },
+        lots: { include: { sales: { where: { cancelledAt: null } } } },
         bilti: { include: { expenses: true, vouchers: { select: { id: true, crates: true, kirayaOverride: true } } } },
       },
     });
@@ -54,6 +61,8 @@ export async function generatePatti(input: GeneratePattiInput) {
       const soldCrates = lot.sales.reduce((s, sale) => s + sale.crates, 0);
       return sum + lot.reportRate * soldCrates;
     }, 0);
+    const actualTotal = voucher.lots.reduce((sum, lot) => sum + lot.sales.reduce((s, sale) => s + sale.actualRate * sale.crates, 0), 0);
+    const rateDifference = actualTotal - grossReport;
 
     const breakdowns = computeBiltiExpenses(voucher.bilti.expenses, voucher.bilti.vouchers, voucher.bilti.totalCrates);
     const thisBreakdown = breakdowns.find((b) => b.voucherId === voucher.id)!;
@@ -61,6 +70,17 @@ export async function generatePatti(input: GeneratePattiInput) {
 
     const commissionRate = await getCommissionRatePercent(tx);
     const totals = computePattiTotals(grossReport, totalExpenses, commissionRate);
+
+    // Rule 6.8, enforced as a hard block rather than just displayed: the
+    // customer-receivable total must equal net payable + commission +
+    // expenses + rate difference exactly, in paisa. This is algebraically
+    // guaranteed by computePattiTotals's own arithmetic, so it should never
+    // actually trip — it's a defence against a future refactor silently
+    // breaking that arithmetic and posting a wrong patti to the ledger.
+    const identityRhs = totals.netPayable + totals.commission + totalExpenses + rateDifference;
+    if (actualTotal !== identityRhs) {
+      throw new ReconciliationError(actualTotal, identityRhs);
+    }
 
     const commissionIncomeId = await getSystemAccountId("COMMISSION_INCOME", tx);
     const expenseRecoveryId = await getSystemAccountId("BILTI_EXPENSE_RECOVERY", tx);

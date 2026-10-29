@@ -9,7 +9,7 @@ export async function getBiltiDetail(biltiId: string) {
       vouchers: {
         include: {
           vendor: true,
-          lots: { include: { sales: { include: { customer: true } } } },
+          lots: { include: { sales: { where: { cancelledAt: null }, include: { customer: true } } } },
         },
         orderBy: { voucherNo: "asc" },
       },

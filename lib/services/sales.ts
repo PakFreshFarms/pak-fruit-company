@@ -30,7 +30,7 @@ export async function createSale(input: CreateSaleInput) {
   return prisma.$transaction(async (tx) => {
     const lot = await tx.lot.findUniqueOrThrow({
       where: { id: input.lotId },
-      include: { sales: true, voucher: true },
+      include: { sales: { where: { cancelledAt: null } }, voucher: true },
     });
 
     const alreadySold = lot.sales.reduce((s, sale) => s + sale.crates, 0);
@@ -90,17 +90,29 @@ export async function createSale(input: CreateSaleInput) {
   });
 }
 
-export async function deleteSaleWithReversal(saleId: string, createdBy: string) {
+/**
+ * Cancels a sale: reverses its journal entry (never edited/deleted, per the
+ * non-negotiable) and flags the Sale row itself as cancelled rather than
+ * deleting it, so it stays visible — who cancelled it and when — in an audit
+ * view, and its crates free up for resale without erasing that it happened.
+ */
+export async function cancelSaleWithReversal(saleId: string, cancelledBy: string) {
   const { reverseJournal } = await import("@/lib/journal");
   return prisma.$transaction(async (tx) => {
-    const sale = await tx.sale.findUniqueOrThrow({ where: { id: saleId } });
+    const sale = await tx.sale.findUniqueOrThrow({ where: { id: saleId }, include: { lot: { include: { voucher: true } } } });
+    if (sale.cancelledAt) {
+      throw new Error("This sale has already been cancelled");
+    }
+    if (sale.lot.voucher.status === "COMPLETE") {
+      throw new Error("This sale's patti has already been issued and cannot be cancelled — reverse the patti first");
+    }
     if (sale.journalEntryId) {
       await reverseJournal(
         sale.journalEntryId,
-        { narration: `Reversal of sale ${saleId}`, narrationKey: "narration.reversalOfSale", createdBy },
+        { narration: `Reversal of sale ${saleId}`, narrationKey: "narration.reversalOfSale", createdBy: cancelledBy },
         tx,
       );
     }
-    return tx.sale.delete({ where: { id: saleId } });
+    return tx.sale.update({ where: { id: saleId }, data: { cancelledAt: new Date(), cancelledBy } });
   });
 }

@@ -28,6 +28,18 @@ interface Props {
     totalVendorPayable: number;
     totalCustomerReceivable: number;
   };
+  cancelledSales: {
+    id: string;
+    date: string;
+    lotName: string;
+    biltiNo: string;
+    vendorName: string;
+    customerName: string;
+    crates: number;
+    actualRate: number;
+    cancelledAt: string;
+    cancelledBy: string | null;
+  }[];
 }
 
 const REPORTS = [
@@ -41,6 +53,7 @@ const REPORTS = [
   "biltiProfitability",
   "farmProfitLoss",
   "seasonClosing",
+  "cancelledSales",
 ] as const;
 
 type ReportKey = (typeof REPORTS)[number];
@@ -527,6 +540,62 @@ export function ReportsView(props: Props) {
                   </tr>
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {active === "cancelledSales" && (
+            <div>
+              <ExportBar
+                title={t("reports.cancelledSales")}
+                columns={[
+                  { header: t("common.date"), key: "date" },
+                  { header: t("reports.lot"), key: "lotName" },
+                  { header: "Bilti", key: "biltiNo" },
+                  { header: t("reports.vendor"), key: "vendorName" },
+                  { header: t("customer.title"), key: "customerName" },
+                  { header: t("common.crates"), key: "crates" },
+                  { header: t("vocab.actualRate"), key: "actualRate", isMoney: true },
+                  { header: t("reports.cancelledAt"), key: "cancelledAt" },
+                  { header: t("reports.cancelledBy"), key: "cancelledBy" },
+                ]}
+                rows={props.cancelledSales}
+              />
+              {props.cancelledSales.length === 0 ? (
+                <p className="text-sm text-muted-foreground">{t("reports.noCancelledSales")}</p>
+              ) : (
+                <table className="ledger-table">
+                  <thead>
+                    <tr>
+                      <th>{t("common.date")}</th>
+                      <th>{t("reports.lot")}</th>
+                      <th>Bilti</th>
+                      <th>{t("reports.vendor")}</th>
+                      <th>{t("customer.title")}</th>
+                      <th className="num">{t("common.crates")}</th>
+                      <th className="num">{t("vocab.actualRate")}</th>
+                      <th>{t("reports.cancelledAt")}</th>
+                      <th>{t("reports.cancelledBy")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {props.cancelledSales.map((s) => (
+                      <tr key={s.id}>
+                        <td className="text-xs text-muted-foreground">{format(new Date(s.date), "dd MMM yyyy")}</td>
+                        <td>{s.lotName}</td>
+                        <td className="text-xs text-muted-foreground">{s.biltiNo}</td>
+                        <td>{s.vendorName}</td>
+                        <td>{s.customerName}</td>
+                        <td className="num">{s.crates}</td>
+                        <td className="num">
+                          <Money paisa={s.actualRate} />
+                        </td>
+                        <td className="text-xs text-muted-foreground">{format(new Date(s.cancelledAt), "dd MMM yyyy, HH:mm")}</td>
+                        <td>{s.cancelledBy ?? "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           )}
         </div>

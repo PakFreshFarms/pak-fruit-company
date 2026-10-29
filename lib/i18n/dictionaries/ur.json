@@ -19,6 +19,7 @@
     "save": "محفوظ کریں",
     "cancel": "منسوخ کریں",
     "delete": "حذف کریں",
+    "deactivate": "غیر فعال کریں",
     "edit": "ترمیم کریں",
     "add": "شامل کریں",
     "new": "نیا",
@@ -37,6 +38,10 @@
     "close": "بند کریں",
     "confirm": "تصدیق کریں",
     "back": "واپس",
+    "confirmDeleteSaleTitle": "یہ فروخت منسوخ کریں؟",
+    "confirmDeleteSaleDescription": "اس سے اس کی لیجر انٹری واپس ہو جائے گی اور کریٹس دوبارہ فروخت کے لیے دستیاب ہو جائیں گے۔ یہ آڈٹ ویو میں منسوخ شدہ کے طور پر نظر آتی رہے گی۔",
+    "confirmDeactivateAccountTitle": "یہ اکاؤنٹ غیر فعال کریں؟",
+    "confirmDeactivateAccountDescription": "یہ فہرستوں اور انتخاب سے چھپ جائے گا۔ اس کی تاریخ اور بیلنس محفوظ رہیں گے اور اکاؤنٹ ہیڈز میں نظر آتے رہیں گے۔",
     "loading": "لوڈ ہو رہا ہے...",
     "noResults": "کوئی نتیجہ نہیں ملا",
     "yes": "ہاں",
@@ -277,7 +282,11 @@
     "realisationPerCrate": "فی کریٹ وصولی",
     "netResult": "خالص نتیجہ",
     "rentDue": "بقایا کرایہ",
-    "result": "نتیجہ"
+    "result": "نتیجہ",
+    "closeSeason": "سیزن بند کریں",
+    "seasonClosed": "سیزن بند ہو چکا",
+    "confirmCloseSeasonTitle": "یہ سیزن بند کریں؟",
+    "confirmCloseSeasonDescription": "یہ مستقل ہے — اس کے بعد اس فارم کے خلاف کوئی اخراجات، روانگی، یا کرایہ ادائیگی درج نہیں ہو سکے گی۔ یہ صرف مالک کر سکتا ہے۔"
   },
   "reports": {
     "title": "رپورٹس",
@@ -291,6 +300,12 @@
     "biltiProfitability": "بلٹی منافع",
     "farmProfitLoss": "فارم منافع و نقصان",
     "seasonClosing": "سیزن اختتامی رپورٹ",
+    "cancelledSales": "منسوخ شدہ فروخت (آڈٹ)",
+    "cancelledBy": "منسوخ کردہ بذریعہ",
+    "cancelledAt": "منسوخ کرنے کا وقت",
+    "lot": "لاٹ",
+    "vendor": "کاشتکار",
+    "noCancelledSales": "کوئی فروخت منسوخ نہیں کی گئی۔",
     "paid": "ادا شدہ",
     "truck": "ٹرک",
     "expenseRecovery": "اخراجات وصولی",
@@ -345,5 +360,20 @@
     "Transport": "ٹرانسپورٹ",
     "Rent": "کرایہ",
     "Other": "دیگر"
+  },
+  "auth": {
+    "signIn": "سائن ان",
+    "whoAreYou": "آج کون کام کر رہا ہے؟",
+    "pin": "پن",
+    "enterPin": "اپنا پن درج کریں",
+    "signInButton": "سائن ان کریں",
+    "wrongPin": "غلط پن",
+    "accountInactive": "یہ اکاؤنٹ اب فعال نہیں ہے",
+    "signOut": "سائن آؤٹ",
+    "owner": "مالک",
+    "munshi": "منشی",
+    "backToUserList": "واپس",
+    "forbiddenOwnerOnly": "یہ صرف مالک کر سکتا ہے",
+    "notSignedIn": "یہ کرنے کے لیے سائن ان ہونا ضروری ہے"
   }
 }

@@ -2,8 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { createSale, deleteSaleWithReversal } from "@/lib/services/sales";
+import { createSale, cancelSaleWithReversal } from "@/lib/services/sales";
 import { toPaisa } from "@/lib/money";
+import { requireSessionUser } from "@/lib/auth/session";
 import type { ActionResult } from "./accounts";
 
 const SaleSchema = z.object({
@@ -17,9 +18,10 @@ const SaleSchema = z.object({
 });
 
 export async function createSaleAction(input: z.infer<typeof SaleSchema>): Promise<ActionResult> {
-  const parsed = SaleSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
   try {
+    const user = await requireSessionUser();
+    const parsed = SaleSchema.safeParse(input);
+    if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
     await createSale({
       lotId: parsed.data.lotId,
       date: parsed.data.date,
@@ -27,7 +29,7 @@ export async function createSaleAction(input: z.infer<typeof SaleSchema>): Promi
       crates: parsed.data.crates,
       actualRate: toPaisa(parsed.data.actualRate),
       notes: parsed.data.notes,
-      createdBy: "owner",
+      createdBy: user.name,
     });
     revalidatePath(`/bilti/${parsed.data.biltiId}`);
     revalidatePath("/dashboard");
@@ -39,7 +41,8 @@ export async function createSaleAction(input: z.infer<typeof SaleSchema>): Promi
 
 export async function deleteSaleAction(saleId: string, biltiId: string): Promise<ActionResult> {
   try {
-    await deleteSaleWithReversal(saleId, "owner");
+    const user = await requireSessionUser();
+    await cancelSaleWithReversal(saleId, user.name);
     revalidatePath(`/bilti/${biltiId}`);
     revalidatePath("/dashboard");
     return { ok: true };

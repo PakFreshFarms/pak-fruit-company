@@ -186,9 +186,12 @@ model Sale {
   journalEntryId String?
   notes          String?
   createdAt      DateTime  @default(now())
+  cancelledAt    DateTime?
+  cancelledBy    String?
 
   @@index([lotId])
   @@index([customerId])
+  @@index([cancelledAt])
 }
 
 model Farm {
@@ -201,6 +204,8 @@ model Farm {
   startDate     DateTime
   endDate       DateTime?
   isClosed      Boolean        @default(false)
+  closedAt      DateTime?
+  closedBy      String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   expenses      FarmExpense[]
@@ -263,12 +268,24 @@ model CashEntry {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
-  role      UserRole @default(MUNSHI)
-  pin       String
-  isActive  Boolean  @default(true)
+  role      UserRole  @default(MUNSHI)
+  pinHash   String
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  sessions  Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Setting {

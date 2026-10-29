@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default async function BiltiListPage() {
   const biltis = await prisma.bilti.findMany({
-    include: { vouchers: { include: { vendor: true, lots: { include: { sales: true } } } } },
+    include: { vouchers: { include: { vendor: true, lots: { include: { sales: { where: { cancelledAt: null } } } } } } },
     orderBy: { date: "desc" },
   });
 

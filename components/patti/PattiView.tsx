@@ -28,6 +28,7 @@ interface Totals {
 }
 
 export function PattiView({
+  isOwner,
   shopName,
   shopAddress,
   pattiNo,
@@ -49,6 +50,7 @@ export function PattiView({
   closedWithUnsold,
   closeReason,
 }: {
+  isOwner: boolean;
   shopName: string;
   shopAddress: string;
   pattiNo: string;
@@ -190,35 +192,37 @@ export function PattiView({
         </div>
       </div>
 
-      <div className="no-print mx-auto mt-6 max-w-2xl rounded-md border border-dashed border-border bg-muted/30 p-4 text-sm">
-        <h3 className="mb-3 text-sm font-semibold">{t("patti.reconciliationPanel")}</h3>
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            Actual sale total: <Money paisa={actualTotal} className="font-medium" />
+      {isOwner && (
+        <div className="no-print mx-auto mt-6 max-w-2xl rounded-md border border-dashed border-border bg-muted/30 p-4 text-sm">
+          <h3 className="mb-3 text-sm font-semibold">{t("patti.reconciliationPanel")}</h3>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              Actual sale total: <Money paisa={actualTotal} className="font-medium" />
+            </div>
+            <div>
+              {t("vocab.rateDifference")}: <Money paisa={rateDifference} className="font-medium" />
+            </div>
+            <div>
+              {t("vocab.netPayable")}: <Money paisa={totals.netPayable} className="font-medium" />
+            </div>
+            <div>
+              {t("vocab.commission")}: <Money paisa={totals.commission} className="font-medium" />
+            </div>
+            <div>
+              Expenses charged: <Money paisa={totals.totalExpenses} className="font-medium" />
+            </div>
           </div>
-          <div>
-            {t("vocab.rateDifference")}: <Money paisa={rateDifference} className="font-medium" />
-          </div>
-          <div>
-            {t("vocab.netPayable")}: <Money paisa={totals.netPayable} className="font-medium" />
-          </div>
-          <div>
-            {t("vocab.commission")}: <Money paisa={totals.commission} className="font-medium" />
-          </div>
-          <div>
-            Expenses charged: <Money paisa={totals.totalExpenses} className="font-medium" />
+          <div className="mt-3 border-t border-border pt-3 text-xs">
+            <p className="mb-1 text-muted-foreground">{t("patti.reconciliationIdentity")}</p>
+            <p className="tabular-nums">
+              <Money paisa={actualTotal} /> = <Money paisa={totals.netPayable} /> + <Money paisa={totals.commission} /> + <Money paisa={totals.totalExpenses} /> + <Money paisa={rateDifference} />
+            </p>
+            <p className={`mt-1 font-medium ${actualTotal === identityRhs ? "text-success" : "text-danger"}`}>
+              {actualTotal === identityRhs ? "✓ Reconciles exactly" : "✗ Does not reconcile — check entries"}
+            </p>
           </div>
         </div>
-        <div className="mt-3 border-t border-border pt-3 text-xs">
-          <p className="mb-1 text-muted-foreground">{t("patti.reconciliationIdentity")}</p>
-          <p className="tabular-nums">
-            <Money paisa={actualTotal} /> = <Money paisa={totals.netPayable} /> + <Money paisa={totals.commission} /> + <Money paisa={totals.totalExpenses} /> + <Money paisa={rateDifference} />
-          </p>
-          <p className={`mt-1 font-medium ${actualTotal === identityRhs ? "text-success" : "text-danger"}`}>
-            {actualTotal === identityRhs ? "✓ Reconciles exactly" : "✗ Does not reconcile — check entries"}
-          </p>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

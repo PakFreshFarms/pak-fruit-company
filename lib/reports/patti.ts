@@ -9,7 +9,7 @@ export async function getPattiData(voucherId: string) {
     include: {
       vendor: true,
       bilti: { include: { expenses: true, vouchers: { select: { id: true, crates: true, kirayaOverride: true } } } },
-      lots: { include: { sales: { include: { customer: true } } } },
+      lots: { include: { sales: { where: { cancelledAt: null }, include: { customer: true } } } },
     },
   });
 
