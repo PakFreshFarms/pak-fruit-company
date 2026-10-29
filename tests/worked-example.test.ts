@@ -57,7 +57,7 @@ describe("end-to-end worked example via the database + journal service", () => {
   let rateDifferenceAccountId: string;
 
   beforeAll(async () => {
-    resetTestDatabase();
+    resetTestDatabase("worked-example");
     const { prisma } = await import("@/lib/db/prisma");
     const { SYSTEM_ACCOUNTS } = await import("@/lib/accounting/system-accounts");
     for (const def of Object.values(SYSTEM_ACCOUNTS)) {
