@@ -8,13 +8,13 @@ function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxP
   return (
     <CheckboxPrimitive.Root
       className={cn(
-        "peer size-4 shrink-0 rounded-sm border border-input bg-card outline-none focus-visible:ring-2 focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-primary",
+        "peer size-6 shrink-0 rounded-md border-2 border-input bg-card outline-none focus-visible:ring-2 focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-primary",
         className,
       )}
       {...props}
     >
       <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
-        <Check className="size-3.5" />
+        <Check className="size-5" />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );

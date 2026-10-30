@@ -22,7 +22,7 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("system");
   const [resolved, setResolved] = useState<"light" | "dark">("light");
-  const [accent, setAccentState] = useState<AccentColor>("rust");
+  const [accent, setAccentState] = useState<AccentColor>("green");
 
   useEffect(() => {
     try {

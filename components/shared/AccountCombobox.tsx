@@ -39,7 +39,11 @@ export function AccountCombobox({
   const [created, setCreated] = useState<ComboboxAccount[]>([]);
   const [creating, startCreating] = useTransition();
 
-  const allAccounts = created.length ? [...accounts, ...created] : accounts;
+  // `created` is this component's optimistic cache of accounts it just made —
+  // once the parent revalidates (e.g. a router.refresh() after a save), the
+  // same account arrives again in `accounts`, so drop it from `created` to
+  // avoid rendering it twice with the same key.
+  const allAccounts = created.length ? [...accounts, ...created.filter((c) => !accounts.some((a) => a.id === c.id))] : accounts;
   const selected = allAccounts.find((a) => a.id === value);
 
   const trimmedQuery = query.trim();

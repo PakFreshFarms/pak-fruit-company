@@ -36,8 +36,6 @@ export default async function PattiPage({ params }: { params: Promise<{ id: stri
       previousBalance={data.previousBalance}
       advanceAdjusted={data.advanceAdjusted}
       closingBalance={data.closingBalance}
-      closedWithUnsold={data.voucher.closedWithUnsold}
-      closeReason={data.voucher.closeReason}
     />
   );
 }

@@ -67,17 +67,17 @@ const VoucherSchema = z.object({
   kirayaOverride: z.coerce.number().optional(),
 });
 
-export async function addVoucherAction(input: z.infer<typeof VoucherSchema>): Promise<ActionResult> {
+export async function addVoucherAction(input: z.infer<typeof VoucherSchema>): Promise<ActionResult & { id?: string }> {
   try {
     await requireSessionUser();
     const parsed = VoucherSchema.safeParse(input);
     if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
-    await addVoucher({
+    const voucher = await addVoucher({
       ...parsed.data,
       kirayaOverride: parsed.data.kirayaOverride != null ? toPaisa(parsed.data.kirayaOverride) : undefined,
     });
     revalidatePath(`/bilti/${parsed.data.biltiId}`);
-    return { ok: true };
+    return { ok: true, id: voucher.id };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Failed to add voucher" };
   }
@@ -115,14 +115,14 @@ export async function updateVoucherKirayaOverrideAction(input: z.infer<typeof Ki
   }
 }
 
-export async function addLotAction(input: z.infer<typeof LotSchema>): Promise<ActionResult> {
+export async function addLotAction(input: z.infer<typeof LotSchema>): Promise<ActionResult & { id?: string }> {
   try {
     await requireSessionUser();
     const parsed = LotSchema.safeParse(input);
     if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
-    await addLot({ voucherId: parsed.data.voucherId, name: parsed.data.name, crates: parsed.data.crates, reportRate: toPaisa(parsed.data.reportRate) });
+    const lot = await addLot({ voucherId: parsed.data.voucherId, name: parsed.data.name, crates: parsed.data.crates, reportRate: toPaisa(parsed.data.reportRate) });
     revalidatePath(`/bilti/${parsed.data.biltiId}`);
-    return { ok: true };
+    return { ok: true, id: lot.id };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Failed to add lot" };
   }

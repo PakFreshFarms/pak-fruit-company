@@ -5,7 +5,7 @@ import { LoginView } from "@/components/auth/LoginView";
 
 export default async function LoginPage() {
   const user = await getCurrentUser();
-  if (user) redirect("/dashboard");
+  if (user) redirect("/home");
 
   const users = await prisma.user.findMany({
     where: { isActive: true },

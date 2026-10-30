@@ -150,8 +150,6 @@ model Voucher {
   status         VoucherStatus @default(OPEN)
   pattiNo        String?       @unique
   pattiDate      DateTime?
-  closedWithUnsold Boolean     @default(false)
-  closeReason    String?
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   lots           Lot[]

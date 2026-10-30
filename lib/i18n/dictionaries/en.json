@@ -4,12 +4,13 @@
     "tagline": "Arhti accounting"
   },
   "nav": {
+    "home": "Home",
     "dashboard": "Dashboard",
-    "bilti": "Bilti",
+    "bilti": "Sales Book",
     "vendors": "Vendors",
     "customers": "Customers",
     "cashBook": "Cash Book",
-    "wasooli": "Wasooli",
+    "wasooli": "Wasooli Book",
     "farms": "Farms",
     "accounts": "Account Heads",
     "reports": "Reports",
@@ -126,6 +127,9 @@
     "netPayable": "Net Payable",
     "grossReport": "Gross Report"
   },
+  "home": {
+    "greeting": "Welcome back, {{name}}"
+  },
   "dashboard": {
     "title": "Dashboard",
     "payableToVendors": "Payable to Vendors",
@@ -204,7 +208,7 @@
   },
   "bilti": {
     "title": "Bilti",
-    "list": "Bilti List",
+    "list": "Sales Book",
     "addBilti": "New Bilti",
     "biltiNo": "Bilti No",
     "truckNo": "Truck No",
@@ -227,6 +231,9 @@
     "kirayaOverride": "Kiraya Override",
     "useBiltiRate": "Using bilti rate",
     "lots": "Lots",
+    "printReceipt": "Print Receipt",
+    "receiptTitle": "Sale Receipt",
+    "receiptThanks": "Thank you",
     "addLot": "Add Lot",
     "lotName": "Lot Name",
     "sales": "Sales",
@@ -237,13 +244,15 @@
     "status_OPEN": "Open",
     "status_COMPLETE": "Complete",
     "generatePatti": "Generate Patti",
-    "closeWithUnsold": "Close voucher with unsold crates",
-    "closeReason": "Reason for closing with unsold crates",
+    "saveVoucher": "Save Voucher",
+    "saveVoucherHint": "All crates are sold — save this voucher to post the patti and commission.",
     "rateCardLocked": "Rate card is locked because a patti has already been issued on this bilti.",
     "selectLot": "Select lot",
     "cratesLeft": "{{n}} left",
     "allLotsSold": "All lots fully sold.",
-    "quickSaleEntry": "Quick Sale Entry"
+    "quickSaleEntry": "Quick Sale Entry",
+    "allCratesAssigned": "All of this bilti's crates have been assigned to vouchers.",
+    "addVoucherFirst": "Add a voucher to start entering sales."
   },
   "patti": {
     "title": "Patti",
@@ -290,6 +299,7 @@
   },
   "reports": {
     "title": "Reports",
+    "salesReport": "Sales Report",
     "trialBalance": "Trial Balance",
     "vendorBalances": "Vendor Balances",
     "customerBalances": "Customer Balances",

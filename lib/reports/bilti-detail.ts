@@ -37,8 +37,12 @@ export async function getBiltiDetail(biltiId: string) {
         soldCrates,
         unassignedLotCrates: v.crates - lotCrates,
         grossReport,
-        canGeneratePatti: v.status === "OPEN" && v.lots.length > 0,
-        fullySold: v.lots.length > 0 && v.lots.every((l) => l.crates === l.sales.reduce((s, sale) => s + sale.crates, 0)),
+        // Spec: a voucher is complete only when its full crate quantity has
+        // been sold — not merely when every lot created so far happens to be
+        // sold out (crates not yet split into any lot would otherwise be
+        // silently ignored and the voucher could look "fully sold" early).
+        canGeneratePatti: v.status === "OPEN" && v.crates > 0 && soldCrates === v.crates,
+        fullySold: v.crates > 0 && soldCrates === v.crates,
       };
     }),
   };

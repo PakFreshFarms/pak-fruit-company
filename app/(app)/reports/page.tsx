@@ -3,6 +3,7 @@ import { getTrialBalance, getRateDifferenceReport, getExpenseRecoveryVsPaid, get
 import { getAccountBalancesByType } from "@/lib/reports/balances";
 import { getAllCustomersAgeing } from "@/lib/reports/ageing";
 import { getAllFarmSummaries } from "@/lib/reports/farm";
+import { getSalesReport } from "@/lib/reports/sales";
 import { ReportsView } from "@/components/reports/ReportsView";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export default async function ReportsPage() {
   const from = startOfMonth(subMonths(now, 1));
   const to = endOfMonth(now);
 
-  const [trialBalance, vendorBalances, customerBalances, ageing, commissionByVendor, rateDiff, expenseVsPaid, biltiProfitability, farms, seasonClosing, cancelledSales] =
+  const [trialBalance, vendorBalances, customerBalances, ageing, commissionByVendor, rateDiff, expenseVsPaid, biltiProfitability, farms, seasonClosing, cancelledSales, salesReport] =
     await Promise.all([
       getTrialBalance(),
       getAccountBalancesByType("VENDOR"),
@@ -25,6 +26,7 @@ export default async function ReportsPage() {
       getAllFarmSummaries(),
       getSeasonClosingReport(from, to),
       getCancelledSales(),
+      getSalesReport(),
     ]);
 
   return (
@@ -51,6 +53,7 @@ export default async function ReportsPage() {
       }))}
       seasonClosing={seasonClosing}
       cancelledSales={cancelledSales.map((s) => ({ ...s, date: s.date.toISOString(), cancelledAt: s.cancelledAt.toISOString() }))}
+      salesReport={salesReport.map((s) => ({ ...s, date: s.date.toISOString() }))}
     />
   );
 }
