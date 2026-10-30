@@ -6,7 +6,7 @@ import { getCommissionRatePercent } from "@/lib/settings";
 
 export class VoucherNotFullySoldError extends Error {
   constructor() {
-    super("This voucher still has unsold crates. Tick 'close voucher with unsold crates' and give a reason, or record the remaining sales first.");
+    super("This voucher still has unsold crates — it cannot be saved/completed until the full quantity is sold.");
     this.name = "VoucherNotFullySoldError";
   }
 }
@@ -26,8 +26,6 @@ async function nextPattiNo(tx: Tx | typeof prisma) {
 export interface GeneratePattiInput {
   voucherId: string;
   createdBy: string;
-  closeWithUnsold?: boolean;
-  closeReason?: string;
   pattiDate?: Date;
 }
 
@@ -45,16 +43,14 @@ export async function generatePatti(input: GeneratePattiInput) {
       throw new Error("A patti has already been generated for this voucher");
     }
 
-    const unsold = voucher.lots.reduce((sum, lot) => {
-      const sold = lot.sales.reduce((s, sale) => s + sale.crates, 0);
-      return sum + (lot.crates - sold);
-    }, 0);
+    // Against the voucher's own crate quantity, not just the sum of lots
+    // created so far — crates never even split into a lot must still count
+    // as unsold, or a voucher could complete without its full quantity sold.
+    const soldAcrossLots = voucher.lots.reduce((sum, lot) => sum + lot.sales.reduce((s, sale) => s + sale.crates, 0), 0);
+    const unsold = voucher.crates - soldAcrossLots;
 
-    if (unsold > 0 && !input.closeWithUnsold) {
+    if (unsold > 0) {
       throw new VoucherNotFullySoldError();
-    }
-    if (unsold > 0 && !input.closeReason) {
-      throw new Error("A reason is required to close a voucher with unsold crates");
     }
 
     const grossReport = voucher.lots.reduce((sum, lot) => {
@@ -130,13 +126,22 @@ export async function generatePatti(input: GeneratePattiInput) {
         status: "COMPLETE",
         pattiNo,
         pattiDate,
-        closedWithUnsold: unsold > 0,
-        closeReason: unsold > 0 ? input.closeReason : null,
       },
     });
 
-    const siblingVouchers = await tx.voucher.findMany({ where: { biltiId: voucher.biltiId } });
-    if (siblingVouchers.every((v) => v.status === "COMPLETE")) {
+    // Spec: a bilti is complete only once every voucher under it is complete
+    // AND total crates sold equals the bilti's total crates — not just "every
+    // voucher that exists happens to be complete" (a bilti can have unassigned
+    // crates that were never even put on a voucher yet).
+    const [siblingVouchers, bilti] = await Promise.all([
+      tx.voucher.findMany({ where: { biltiId: voucher.biltiId }, include: { lots: { include: { sales: { where: { cancelledAt: null } } } } } }),
+      tx.bilti.findUniqueOrThrow({ where: { id: voucher.biltiId } }),
+    ]);
+    const totalSold = siblingVouchers.reduce(
+      (sum, v) => sum + v.lots.reduce((s, lot) => s + lot.sales.reduce((ss, sale) => ss + sale.crates, 0), 0),
+      0,
+    );
+    if (siblingVouchers.every((v) => v.status === "COMPLETE") && totalSold === bilti.totalCrates) {
       await tx.bilti.update({ where: { id: voucher.biltiId }, data: { status: "COMPLETE" } });
     }
 

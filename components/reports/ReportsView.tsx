@@ -40,9 +40,24 @@ interface Props {
     cancelledAt: string;
     cancelledBy: string | null;
   }[];
+  salesReport: {
+    id: string;
+    date: string;
+    biltiNo: string;
+    voucherNo: string;
+    voucherStatus: "OPEN" | "COMPLETE";
+    vendorName: string;
+    lotName: string;
+    customerName: string;
+    crates: number;
+    reportRate: number;
+    actualRate: number;
+    amount: number;
+  }[];
 }
 
 const REPORTS = [
+  "salesReport",
   "trialBalance",
   "vendorBalances",
   "customerBalances",
@@ -76,7 +91,7 @@ function ExportBar({ title, columns, rows }: { title: string; columns: ExportCol
 
 export function ReportsView(props: Props) {
   const t = useTranslation();
-  const [active, setActive] = useState<ReportKey>("trialBalance");
+  const [active, setActive] = useState<ReportKey>("salesReport");
 
   return (
     <div>
@@ -95,6 +110,66 @@ export function ReportsView(props: Props) {
         </nav>
 
         <div className="min-w-0 flex-1">
+          {active === "salesReport" && (
+            <div>
+              <ExportBar
+                title={t("reports.salesReport")}
+                columns={[
+                  { header: t("common.date"), key: "date" },
+                  { header: "Bilti", key: "biltiNo" },
+                  { header: t("bilti.voucherNo"), key: "voucherNo" },
+                  { header: t("reports.vendor"), key: "vendorName" },
+                  { header: t("reports.lot"), key: "lotName" },
+                  { header: t("customer.title"), key: "customerName" },
+                  { header: t("common.crates"), key: "crates" },
+                  { header: t("vocab.actualRate"), key: "actualRate", isMoney: true },
+                  { header: t("common.amount"), key: "amount", isMoney: true },
+                ]}
+                rows={props.salesReport}
+              />
+              {props.salesReport.length === 0 ? (
+                <p className="text-sm text-muted-foreground">{t("common.noResults")}</p>
+              ) : (
+                <table className="ledger-table">
+                  <thead>
+                    <tr>
+                      <th>{t("common.date")}</th>
+                      <th>Bilti</th>
+                      <th>{t("bilti.voucherNo")}</th>
+                      <th>{t("reports.vendor")}</th>
+                      <th>{t("reports.lot")}</th>
+                      <th>{t("customer.title")}</th>
+                      <th className="num">{t("common.crates")}</th>
+                      <th className="num">{t("vocab.actualRate")}</th>
+                      <th className="num">{t("common.amount")}</th>
+                      <th>{t("common.status")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {props.salesReport.map((s) => (
+                      <tr key={s.id}>
+                        <td className="text-xs text-muted-foreground">{format(new Date(s.date), "dd MMM yyyy, HH:mm")}</td>
+                        <td>{s.biltiNo}</td>
+                        <td>{s.voucherNo}</td>
+                        <td>{s.vendorName}</td>
+                        <td>{s.lotName}</td>
+                        <td>{s.customerName}</td>
+                        <td className="num">{s.crates}</td>
+                        <td className="num">
+                          <Money paisa={s.actualRate} />
+                        </td>
+                        <td className="num font-medium">
+                          <Money paisa={s.amount} />
+                        </td>
+                        <td className="text-xs text-muted-foreground">{t(`bilti.status_${s.voucherStatus}`)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+
           {active === "trialBalance" && (
             <div>
               <ExportBar

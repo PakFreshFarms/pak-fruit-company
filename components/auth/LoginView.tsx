@@ -35,7 +35,7 @@ export function LoginView({ users }: { users: LoginUser[] }) {
     const res = await loginAction({ userId: selected.id, pin });
     setSubmitting(false);
     if (res.ok) {
-      router.push("/dashboard");
+      router.push("/home");
       router.refresh();
     } else {
       toast.error(t(`auth.${res.error}`) !== `auth.${res.error}` ? t(`auth.${res.error}`) : res.error);

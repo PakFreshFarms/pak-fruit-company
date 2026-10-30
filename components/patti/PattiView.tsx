@@ -47,8 +47,6 @@ export function PattiView({
   previousBalance,
   advanceAdjusted,
   closingBalance,
-  closedWithUnsold,
-  closeReason,
 }: {
   isOwner: boolean;
   shopName: string;
@@ -69,8 +67,6 @@ export function PattiView({
   previousBalance: number;
   advanceAdjusted: number;
   closingBalance: number;
-  closedWithUnsold: boolean;
-  closeReason: string | null;
 }) {
   const t = useTranslation();
   const identityRhs = totals.netPayable + totals.commission + totals.totalExpenses + rateDifference;
@@ -112,12 +108,6 @@ export function PattiView({
             Item: <span className="font-medium">{itemName}</span>
           </div>
         </div>
-
-        {closedWithUnsold && (
-          <div className="mb-4 border border-dashed border-border p-2 text-xs text-muted-foreground">
-            Closed with unsold crates. Reason: {closeReason}
-          </div>
-        )}
 
         <table className="ledger-table mb-4">
           <thead>

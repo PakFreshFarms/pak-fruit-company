@@ -4,12 +4,13 @@
     "tagline": "آڑھتی اکاؤنٹنگ"
   },
   "nav": {
+    "home": "ہوم",
     "dashboard": "ڈیش بورڈ",
-    "bilti": "بلٹی",
+    "bilti": "سیلز بک",
     "vendors": "کاشتکار",
     "customers": "خریدار",
     "cashBook": "کیش بک",
-    "wasooli": "وصولی",
+    "wasooli": "وصولی بک",
     "farms": "فارمز",
     "accounts": "اکاؤنٹ ہیڈز",
     "reports": "رپورٹس",
@@ -126,6 +127,9 @@
     "netPayable": "قابل ادائیگی رقم",
     "grossReport": "کل رپورٹ رقم"
   },
+  "home": {
+    "greeting": "خوش آمدید، {{name}}"
+  },
   "dashboard": {
     "title": "ڈیش بورڈ",
     "payableToVendors": "کاشتکاروں کو قابلِ ادائیگی",
@@ -204,7 +208,7 @@
   },
   "bilti": {
     "title": "بلٹی",
-    "list": "بلٹی فہرست",
+    "list": "سیلز بک",
     "addBilti": "نئی بلٹی",
     "biltiNo": "بلٹی نمبر",
     "truckNo": "ٹرک نمبر",
@@ -227,6 +231,9 @@
     "kirayaOverride": "کرایہ تبدیل کریں",
     "useBiltiRate": "بلٹی ریٹ استعمال ہو رہا ہے",
     "lots": "لاٹس",
+    "printReceipt": "رسید پرنٹ کریں",
+    "receiptTitle": "فروخت رسید",
+    "receiptThanks": "شکریہ",
     "addLot": "لاٹ شامل کریں",
     "lotName": "لاٹ کا نام",
     "sales": "فروخت",
@@ -237,13 +244,15 @@
     "status_OPEN": "کھلا",
     "status_COMPLETE": "مکمل",
     "generatePatti": "پٹی بنائیں",
-    "closeWithUnsold": "غیر فروخت شدہ کریٹس کے ساتھ واؤچر بند کریں",
-    "closeReason": "غیر فروخت شدہ کریٹس کے ساتھ بند کرنے کی وجہ",
+    "saveVoucher": "واؤچر محفوظ کریں",
+    "saveVoucherHint": "تمام کریٹس فروخت ہو چکے ہیں — پٹی اور کمیشن پوسٹ کرنے کے لیے یہ واؤچر محفوظ کریں۔",
     "rateCardLocked": "ریٹ کارڈ مقفل ہے کیونکہ اس بلٹی پر پٹی جاری کی جا چکی ہے۔",
     "selectLot": "لاٹ منتخب کریں",
     "cratesLeft": "{{n}} باقی",
     "allLotsSold": "تمام لاٹس مکمل فروخت ہو چکیں۔",
-    "quickSaleEntry": "فوری فروخت اندراج"
+    "quickSaleEntry": "فوری فروخت اندراج",
+    "allCratesAssigned": "اس بلٹی کے تمام کریٹس واؤچرز میں تفویض ہو چکے ہیں۔",
+    "addVoucherFirst": "فروخت درج کرنے کے لیے پہلے واؤچر شامل کریں۔"
   },
   "patti": {
     "title": "پٹی",
@@ -290,6 +299,7 @@
   },
   "reports": {
     "title": "رپورٹس",
+    "salesReport": "سیلز رپورٹ",
     "trialBalance": "ٹرائل بیلنس",
     "vendorBalances": "کاشتکار بیلنس",
     "customerBalances": "خریدار بیلنس",

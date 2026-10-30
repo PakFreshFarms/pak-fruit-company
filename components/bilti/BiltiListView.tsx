@@ -7,8 +7,8 @@ import { useTranslation } from "@/lib/i18n/LocaleProvider";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/components/shared/DataTable";
-import { NewBiltiDialog } from "./NewBiltiDialog";
-import { Truck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Truck, Plus } from "lucide-react";
 
 interface BiltiRow {
   id: string;
@@ -66,7 +66,17 @@ export function BiltiListView({ biltis }: { biltis: BiltiRow[] }) {
 
   return (
     <div>
-      <PageHeader title={t("bilti.list")} actions={<NewBiltiDialog />} />
+      <PageHeader
+        title={t("bilti.list")}
+        actions={
+          <Link href="/bilti/new">
+            <Button>
+              <Plus className="size-5" />
+              {t("bilti.addBilti")}
+            </Button>
+          </Link>
+        }
+      />
       <DataTable
         columns={columns}
         data={biltis}

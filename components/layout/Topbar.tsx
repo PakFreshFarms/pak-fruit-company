@@ -56,8 +56,8 @@ export function Topbar({ onOpenPalette, user }: { onOpenPalette?: () => void; us
   const title = t(SECTION_KEYS[section] ?? "app.name");
 
   return (
-    <header className="no-print flex h-14 shrink-0 items-center justify-between border-b border-border bg-card px-6">
-      <div className="text-sm font-semibold">{title}</div>
+    <header className="no-print flex h-20 shrink-0 items-center justify-between border-b-2 border-border bg-card px-6 py-3">
+      <div className="text-xl font-bold">{title}</div>
       <div className="flex items-center gap-2">
         <Button variant="outline" size="sm" onClick={onOpenPalette} className="text-muted-foreground">
           <Search className="size-3.5" />
